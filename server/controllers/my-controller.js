@@ -3,7 +3,7 @@
 module.exports = ({ strapi }) => ({
   index(ctx) {
     ctx.body = strapi
-      .plugin("strapi-plugin-commercetools-integration")
+      .plugin("commercetools")
       .service("myService")
       .getWelcomeMessage();
   },

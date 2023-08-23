@@ -1,3 +1,3 @@
-const pluginId = "strapi-plugin-commercetools-integration";
+const pluginId = "commercetools";
 
 export default pluginId;

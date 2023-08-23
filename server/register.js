@@ -3,7 +3,7 @@
 module.exports = ({ strapi }) => {
   strapi.customFields.register({
     name: "ProductGrid",
-    plugin: "strapi-plugin-commercetools-integration",
+    plugin: "commercetools",
     type: "text",
   });
 };
