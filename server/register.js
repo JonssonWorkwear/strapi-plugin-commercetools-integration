@@ -5,5 +5,9 @@ module.exports = ({ strapi }) => {
     name: "ProductGrid",
     plugin: "commercetools",
     type: "text",
+    inputSize: {
+      default: 12,
+      isResizable: false,
+    },
   });
 };
