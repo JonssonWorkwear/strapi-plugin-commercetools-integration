@@ -1,3 +1,3 @@
-const pluginId = "commercetools";
+const pluginId = 'commercetools';
 
 export default pluginId;

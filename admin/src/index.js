@@ -1,46 +1,45 @@
-import { prefixPluginTranslations } from "@strapi/helper-plugin";
+import { prefixPluginTranslations } from '@strapi/helper-plugin';
 
-import pluginId from "./pluginId";
+import pluginId from './pluginId';
 
-import PluginIcon from "./components/PluginIcon";
+import PluginIcon from './components/PluginIcon';
 
 export default {
   register(app) {
     app.customFields.register({
-      name: "ProductGrid",
+      name: 'ProductGrid',
       pluginId: pluginId,
-      type: "text",
+      type: 'text',
       icon: PluginIcon,
       intlLabel: {
-        id: "commercetools.label",
-        defaultMessage: "Product grid",
+        id: 'commercetools.label',
+        defaultMessage: 'Product grid',
       },
       intlDescription: {
-        id: "commercetools.description",
-        defaultMessage: "List of products, then pick one",
+        id: 'commercetools.description',
+        defaultMessage: 'List of products, then pick one',
       },
       components: {
-        Input: async () => import("./components/ProductGrid"),
+        Input: async () => import('./components/ProductGrid'),
       },
       options: {
         advanced: [
           {
             sectionTitle: {
-              id: "commercetools.settings",
-              defaultMessage: "Settings",
+              id: 'commercetools.settings',
+              defaultMessage: 'Settings',
             },
             items: [
               {
-                name: "required",
-                type: "checkbox",
+                name: 'required',
+                type: 'checkbox',
                 intlLabel: {
-                  id: "commercetools.required.label",
-                  defaultMessage: "Required field",
+                  id: 'commercetools.required.label',
+                  defaultMessage: 'Required field',
                 },
                 description: {
-                  id: "commercetools.required.description",
-                  defaultMessage:
-                    "You won't be able to create an entry if this field is empty",
+                  id: 'commercetools.required.description',
+                  defaultMessage: "You won't be able to create an entry if this field is empty",
                 },
               },
             ],

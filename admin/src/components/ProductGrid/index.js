@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 import {
   Field,
@@ -17,11 +17,11 @@ import {
   CardTitle,
   CardSubtitle,
   Loader,
-} from "@strapi/design-system";
+} from '@strapi/design-system';
 
-import { request } from "@strapi/helper-plugin";
+import { request } from '@strapi/helper-plugin';
 
-import { useIntl } from "react-intl";
+import { useIntl } from 'react-intl';
 
 export default function ProductGrid({
   intlLabel,
@@ -38,11 +38,11 @@ export default function ProductGrid({
   const [productData, setProductData] = useState([]);
 
   const fetchData = async () => {
-    const data = await request("/commercetools/getAllProducts", {
-      method: "GET",
+    const data = await request('/commercetools/getAllProducts', {
+      method: 'GET',
     });
 
-    console.log("data", data);
+    console.log('data', data);
 
     setProductData(data);
   };

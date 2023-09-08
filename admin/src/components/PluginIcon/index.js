@@ -1,14 +1,8 @@
-import React from "react";
+import React from 'react';
 
 export default function PluginIcon() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="32"
-      height="24"
-      fill="#F6F6F9"
-      stroke="#DCDCE4"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="24" fill="#F6F6F9" stroke="#DCDCE4">
       <rect width="31" height="23" x=".5" y=".5" rx="2.5" />
       <path
         fill="#F17B22"
