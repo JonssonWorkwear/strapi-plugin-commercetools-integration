@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+import styled from 'styled-components';
+
 import {
-  Field,
-  FieldLabel,
-  FieldHint,
-  FieldError,
   Flex,
   Box,
   GridLayout,
@@ -20,22 +18,12 @@ import {
 } from '@strapi/design-system';
 
 import { request } from '@strapi/helper-plugin';
-import { useIntl } from 'react-intl';
 
-import ProductCarousel from './ProductCarousel';
+const Grid = styled(GridLayout)`
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+`;
 
-export function ProductGrid({
-  intlLabel,
-  name,
-  onChange,
-  value,
-  labelAction,
-  required,
-  error,
-  description,
-}) {
-  const { formatMessage } = useIntl();
-
+export function ProductGrid({}) {
   const [productData, setProductData] = useState([]);
 
   const fetchData = async () => {
@@ -53,40 +41,30 @@ export function ProductGrid({
   }, []);
 
   return (
-    <Field name={name} id={name} error={error} hint={description}>
-      <Flex justifyContent="space-between" paddingBottom={2}>
-        <FieldLabel labelAction={labelAction} required={required}>
-          {formatMessage(intlLabel)}
-        </FieldLabel>
-      </Flex>
-      <ProductCarousel />
-      <Box padding={8} background="neutral100">
-        {productData.length > 0 ? (
-          <GridLayout>
-            {productData.map((product) => (
-              <Card id={`product-${product.id}`}>
-                <CardHeader>
-                  <CardCheckbox value />
-                  <CardAsset src={product.image} />
-                </CardHeader>
-                <CardBody>
-                  <CardContent>
-                    <CardTitle>{product.title}</CardTitle>
-                    <CardSubtitle>R{product.price}</CardSubtitle>
-                  </CardContent>
-                  {/* <CardBadge>Doc</CardBadge> */}
-                </CardBody>
-              </Card>
-            ))}
-          </GridLayout>
-        ) : (
-          <Flex alignItems="center" justifyContent="center">
-            <Loader>Loading content...</Loader>
-          </Flex>
-        )}
-      </Box>
-      <FieldHint />
-      <FieldError />
-    </Field>
+    <Box>
+      {productData.length > 0 ? (
+        <Grid>
+          {productData.map((product) => (
+            <Card key={`product-${product.id}`}>
+              <CardHeader>
+                <CardCheckbox value />
+                <CardAsset src={product.image} />
+              </CardHeader>
+              <CardBody>
+                <CardContent>
+                  <CardTitle>{product.title}</CardTitle>
+                  <CardSubtitle>R{product.price}</CardSubtitle>
+                </CardContent>
+                {/* <CardBadge>Doc</CardBadge> */}
+              </CardBody>
+            </Card>
+          ))}
+        </Grid>
+      ) : (
+        <Flex alignItems="center" justifyContent="center" style={{ minHeight: '60vh' }}>
+          <Loader>Loading content...</Loader>
+        </Flex>
+      )}
+    </Box>
   );
 }

@@ -21,7 +21,15 @@ import { Pencil, Trash } from '@strapi/icons';
 
 import { EmptyState } from './EmptyState';
 
-export function ProductCarousel({ name, description, required, error, disabled, products }) {
+export function ProductCarousel({
+  name,
+  description,
+  openModal,
+  required,
+  error,
+  disabled,
+  products,
+}) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const carouselLength = products.length === 1 ? 1 : products.length - 1;
@@ -50,7 +58,7 @@ export function ProductCarousel({ name, description, required, error, disabled, 
         products.length > 0 ? (
           <CarouselActions style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}>
             <IconButton
-              onClick={() => console.log('edit')}
+              onClick={openModal}
               label="Edit"
               aria-label="Edit"
               id="edit"
