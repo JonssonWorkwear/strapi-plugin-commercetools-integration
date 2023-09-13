@@ -25,6 +25,7 @@ export function ProductCarousel({
   name,
   description,
   openModal,
+  onDelete,
   required,
   error,
   disabled,
@@ -66,7 +67,7 @@ export function ProductCarousel({
               disabled={disabled}
             />
             <IconButton
-              onClick={() => console.log('Delete')}
+              onClick={onDelete}
               label="Delete"
               aria-label="Delete"
               id="delete"
@@ -79,7 +80,7 @@ export function ProductCarousel({
     >
       {products.length === 0 ? (
         <CarouselSlide label="1 of 1 products">
-          <EmptyState disabled={disabled} />
+          <EmptyState disabled={disabled} onClick={openModal} />
         </CarouselSlide>
       ) : (
         products.map((product, index) => (
@@ -88,7 +89,7 @@ export function ProductCarousel({
             label={`${index + 1} of ${products.length} products`}
             style={{ height: '250px' }}
           >
-            <Card id={`product-${product.id}`} style={{ width: '300px' }}>
+            {/* <Card id={`product-${product.id}`} style={{ width: '300px' }}>
               <CardHeader>
                 <CardAsset src={product.imageUrl} />
               </CardHeader>
@@ -97,9 +98,10 @@ export function ProductCarousel({
                   <CardTitle>{product.title}</CardTitle>
                   <CardSubtitle>R{product.price}</CardSubtitle>
                 </CardContent>
-                {/* <CardBadge>Doc</CardBadge> */}
+                <CardBadge>Doc</CardBadge>
               </CardBody>
-            </Card>
+            </Card> */}
+            {product.id}
           </CarouselSlide>
         ))
       )}
