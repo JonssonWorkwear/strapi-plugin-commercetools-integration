@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { MessageDescriptor } from 'react-intl';
 
 import {
   CarouselInput,
@@ -21,6 +21,22 @@ import { Pencil, Trash } from '@strapi/icons';
 
 import { EmptyState } from './EmptyState';
 
+type ProductCarouselProps = {
+  name: string;
+  description?: MessageDescriptor;
+  required?: boolean;
+  error?: string;
+  openModal: () => void;
+  onDelete: () => void;
+  disabled?: boolean;
+  products: Array<{
+    id: string;
+    title?: string;
+    imageUrl?: string;
+    price?: number;
+  }>;
+};
+
 export function ProductCarousel({
   name,
   description,
@@ -30,7 +46,7 @@ export function ProductCarousel({
   error,
   disabled,
   products,
-}) {
+}: ProductCarouselProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const carouselLength = products.length === 1 ? 1 : products.length - 1;
@@ -108,19 +124,3 @@ export function ProductCarousel({
     </CarouselInput>
   );
 }
-
-ProductCarousel.propTypes = {
-  name: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  required: PropTypes.bool,
-  error: PropTypes.any,
-  disabled: PropTypes.bool,
-  products: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-      price: PropTypes.number.isRequired,
-    })
-  ).isRequired,
-};

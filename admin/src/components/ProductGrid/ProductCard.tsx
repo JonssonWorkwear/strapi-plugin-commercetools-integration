@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import {
   Card,
@@ -12,7 +11,24 @@ import {
   CardSubtitle,
 } from '@strapi/design-system';
 
-export function ProductCard({ id, title, price, image, selected, onSelection, ...props }) {
+type ProductCardProps = {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+  selected: boolean;
+  onSelection: () => void;
+} & Record<string, any>;
+
+export function ProductCard({
+  id,
+  title,
+  price,
+  image,
+  selected,
+  onSelection,
+  ...props
+}: ProductCardProps) {
   return (
     <Card key={props.key}>
       <CardHeader>
@@ -29,19 +45,3 @@ export function ProductCard({ id, title, price, image, selected, onSelection, ..
     </Card>
   );
 }
-
-ProductCard.defaultProps = {
-  selected: false,
-  onSelection: undefined,
-  image: '',
-  title: '',
-  price: 0,
-};
-
-ProductCard.propTypes = {
-  selected: PropTypes.bool.isRequired,
-  onSelection: PropTypes.func.isRequired,
-  image: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-};

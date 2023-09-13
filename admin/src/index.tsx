@@ -1,11 +1,11 @@
 import { prefixPluginTranslations } from '@strapi/helper-plugin';
 
+import { PluginIcon } from './components/CommercetoolsIcon';
+
 import pluginId from './pluginId';
 
-import PluginIcon from './components/PluginIcon';
-
 export default {
-  register(app) {
+  register(app: any) {
     app.customFields.register({
       name: 'ProductGrid',
       pluginId: pluginId,
@@ -20,7 +20,10 @@ export default {
         defaultMessage: 'List of products, then pick one',
       },
       components: {
-        Input: async () => import('./components/ProductGrid'),
+        Input: async () =>
+          import(
+            /* webpackChunkName: "color-picker-input-component" */ './components/ProductGrid'
+          ).then((module) => ({ default: module.ProductGrid })),
       },
       options: {
         advanced: [
@@ -49,14 +52,10 @@ export default {
     });
   },
 
-  bootstrap() {},
-
-  async registerTrads({ locales }) {
+  async registerTrads({ locales }: { locales: string[] }) {
     const importedTrads = await Promise.all(
       locales.map((locale) => {
-        return import(
-          /* webpackChunkName: "translation-[request]" */ `./translations/${locale}.json`
-        )
+        return import(`./translations/${locale}.json`)
           .then(({ default: data }) => {
             return {
               data: prefixPluginTranslations(data, pluginId),

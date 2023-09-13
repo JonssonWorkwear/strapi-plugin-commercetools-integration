@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
 import {
   Flex,
@@ -24,9 +23,26 @@ const Grid = styled(GridLayout)`
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 `;
 
-export function ProductGridModal({ setIsModalOpen, onFinish, initialSelectedProductId }) {
-  const [productData, setProductData] = useState([]);
-  const [selectedProductId, setSelectedProductId] = useState(null);
+type ProductGridModalProps = {
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onFinish: (selectedProductId: string | null) => void;
+  initialSelectedProductId?: string | null;
+};
+
+type ProductModelType = {
+  id: string;
+  title: string;
+  price: number;
+  image: string;
+};
+
+export function ProductGridModal({
+  setIsModalOpen,
+  onFinish,
+  initialSelectedProductId,
+}: ProductGridModalProps) {
+  const [productData, setProductData] = useState<Array<ProductModelType>>([]);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   console.log('selectedProductId', selectedProductId);
   console.log('initialSelectedProductId', initialSelectedProductId);
@@ -43,7 +59,7 @@ export function ProductGridModal({ setIsModalOpen, onFinish, initialSelectedProd
 
   function onClose() {
     // Close the modal if the value didn't change
-    if (parseInt(initialSelectedProductId) === parseInt(selectedProductId)) {
+    if (initialSelectedProductId === selectedProductId) {
       setIsModalOpen((prev) => !prev);
     } else {
       const result = window.confirm(
@@ -57,7 +73,7 @@ export function ProductGridModal({ setIsModalOpen, onFinish, initialSelectedProd
 
   useEffect(() => {
     if (initialSelectedProductId) {
-      setSelectedProductId(parseInt(initialSelectedProductId));
+      setSelectedProductId(initialSelectedProductId);
     }
 
     fetchData();
@@ -121,13 +137,3 @@ export function ProductGridModal({ setIsModalOpen, onFinish, initialSelectedProd
     </ModalLayout>
   );
 }
-
-ProductGridModal.propTypes = {
-  setIsModalOpen: PropTypes.func.isRequired,
-  onFinish: PropTypes.func.isRequired,
-  initialSelectedProductId: PropTypes.number,
-};
-
-ProductGridModal.defaultProps = {
-  initialSelectedProductId: null,
-};

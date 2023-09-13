@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react';
 
-import { useIntl } from 'react-intl';
+import { useIntl, MessageDescriptor } from 'react-intl';
 
-import { ProductCarousel } from './ProductCarousel';
 import { ProductGridModal } from './ProductGridModal';
+import { ProductCarousel } from './ProductCarousel';
 
-export default function ProductGrid({
+type ProductGridProps = {
+  intlLabel: MessageDescriptor;
+  onChange: (event: { target: { name: string; value?: string | null; type?: string } }) => void;
+  name: string;
+  description?: MessageDescriptor;
+  disabled?: boolean;
+  error?: string;
+  labelAction?: React.ReactNode;
+  required?: boolean;
+  value?: string;
+};
+
+type ProductModelType = {
+  id: string;
+  title?: string;
+  imageUrl?: string;
+  price?: number;
+};
+
+export function ProductGrid({
   intlLabel,
   name,
   onChange,
@@ -15,11 +34,11 @@ export default function ProductGrid({
   error,
   description,
   disabled,
-}) {
+}: ProductGridProps) {
   const { formatMessage } = useIntl();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [productData, setProductData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [productData, setProductData] = useState<Array<ProductModelType> | null>(null);
 
   // Set initial productData
   useEffect(() => {
@@ -32,7 +51,7 @@ export default function ProductGrid({
   }, []);
 
   // Fetch data for the selected product
-  function fetchProductData(productId) {
+  function fetchProductData(productId: string | null) {
     if (!productId) return [];
 
     return [{ id: productId }];
@@ -40,12 +59,11 @@ export default function ProductGrid({
 
   // Update the selected product data and the value
   // of the entry – visible to the API!
-  function handleChange(productId) {
+  function handleChange(productId: string | null) {
     const productData = fetchProductData(productId);
-    const productIdString = productId && productId.toString();
 
     setProductData(productData);
-    onChange({ target: { name, value: productIdString } });
+    onChange({ target: { name, value: productId } });
   }
 
   if (productData) {

@@ -1,9 +1,7 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import { Flex, Icon, Typography } from '@strapi/design-system';
-
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 import { CommercetoolsPlusIcon, CommercetoolsGrayIcon } from '../CommercetoolsIcon';
 
@@ -12,7 +10,12 @@ const TextAlignTypography = styled(Typography)`
   margin-top: 8px;
 `;
 
-export function EmptyState({ disabled, onClick }) {
+type EmptyStateProps = {
+  disabled?: boolean;
+  onClick?: () => void;
+};
+
+export function EmptyState({ disabled, onClick }: EmptyStateProps) {
   return (
     <Flex
       direction="column"
@@ -44,12 +47,3 @@ export function EmptyState({ disabled, onClick }) {
     </Flex>
   );
 }
-
-EmptyState.defaultProps = {
-  disabled: false,
-};
-
-EmptyState.propTypes = {
-  disabled: PropTypes.bool,
-  onClick: PropTypes.func.isRequired,
-};
