@@ -17,4 +17,13 @@ export default [
       auth: false,
     },
   },
+  {
+    method: 'GET',
+    path: '/getProductById/:id',
+    handler: 'productController.getProductById',
+    config: {
+      policies: [],
+      auth: false,
+    },
+  },
 ];

@@ -4,6 +4,7 @@ import { DUMMY_DATA as data } from './data';
 
 export default ({ strapi }: { strapi: Strapi }) => ({
   async getAllProducts() {
+    await new Promise((resolve) => setTimeout(resolve, 600));
     return data;
   },
 

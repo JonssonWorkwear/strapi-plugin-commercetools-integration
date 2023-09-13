@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
 import { useIntl, MessageDescriptor } from 'react-intl';
+
+import { request } from '@strapi/helper-plugin';
 
 import { ProductGridModal } from './ProductGridModal';
 import { ProductCarousel } from './ProductCarousel';
@@ -42,27 +43,26 @@ export function ProductGrid({
 
   // Set initial productData
   useEffect(() => {
+    async function fetchData(productId: string) {
+      const productData = await request(`/commercetools/getProductById/${productId}`, {
+        method: 'GET',
+      });
+
+      // rename image to imageUrl
+      productData.imageUrl = productData.image;
+      setProductData([productData]);
+    }
+
     if (value) {
-      const productData = fetchProductData(value);
-      setProductData(productData);
+      fetchData(value);
     } else {
       setProductData([]);
     }
-  }, []);
-
-  // Fetch data for the selected product
-  function fetchProductData(productId: string | null) {
-    if (!productId) return [];
-
-    return [{ id: productId }];
-  }
+  }, [value]);
 
   // Update the selected product data and the value
   // of the entry – visible to the API!
   function handleChange(productId: string | null) {
-    const productData = fetchProductData(productId);
-
-    setProductData(productData);
     onChange({ target: { name, value: productId } });
   }
 

@@ -14,7 +14,6 @@ import {
   CardSubtitle,
   CardHeader,
   CardAsset,
-  CardBadge,
 } from '@strapi/design-system';
 
 import { Pencil, Trash } from '@strapi/icons';
@@ -105,7 +104,7 @@ export function ProductCarousel({
             label={`${index + 1} of ${products.length} products`}
             style={{ height: '250px' }}
           >
-            {/* <Card id={`product-${product.id}`} style={{ width: '300px' }}>
+            <Card id={`product-${product.id}`} style={{ width: '300px' }}>
               <CardHeader>
                 <CardAsset src={product.imageUrl} />
               </CardHeader>
@@ -114,10 +113,8 @@ export function ProductCarousel({
                   <CardTitle>{product.title}</CardTitle>
                   <CardSubtitle>R{product.price}</CardSubtitle>
                 </CardContent>
-                <CardBadge>Doc</CardBadge>
               </CardBody>
-            </Card> */}
-            {product.id}
+            </Card>
           </CarouselSlide>
         ))
       )}
