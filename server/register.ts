@@ -3,7 +3,7 @@ import { Strapi } from '@strapi/strapi';
 export default ({ strapi }: { strapi: Strapi }) => {
   strapi.customFields.register({
     name: 'ProductGrid',
-    plugin: 'commercetools',
+    pluginId: 'commercetools',
     type: 'text',
     inputSize: {
       default: 12,
