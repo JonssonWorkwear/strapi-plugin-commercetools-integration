@@ -1,9 +1,10 @@
 import React from 'react';
+
 import styled from 'styled-components';
 
 import { Flex, Icon, Typography } from '@strapi/design-system';
 
-import { CommercetoolsPlusIcon, CommercetoolsGrayIcon } from '../CommercetoolsIcon';
+import { CommercetoolsPlusIcon, CommercetoolsGrayIcon } from '../../CommercetoolsIcon';
 
 const TextAlignTypography = styled(Typography)`
   align-items: center;
@@ -15,7 +16,7 @@ type EmptyStateProps = {
   onClick?: () => void;
 };
 
-export function EmptyState({ disabled, onClick }: EmptyStateProps) {
+export function ProductCarouselEmpty({ disabled, onClick }: EmptyStateProps) {
   return (
     <Flex
       direction="column"
@@ -27,7 +28,11 @@ export function EmptyState({ disabled, onClick }: EmptyStateProps) {
       type="button"
       disabled={disabled}
       onClick={onClick}
-      style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
+      style={{
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        marginTop: '28px',
+        marginBottom: '28px',
+      }}
     >
       <Icon
         as={disabled ? CommercetoolsGrayIcon : CommercetoolsPlusIcon}
