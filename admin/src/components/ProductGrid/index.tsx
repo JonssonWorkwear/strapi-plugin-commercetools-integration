@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, MessageDescriptor } from 'react-intl';
 
-import { request, useNotification } from '@strapi/helper-plugin';
+import { useFetchClient, useNotification } from '@strapi/helper-plugin';
 
 import { ProductGridModal } from './ProductGridModal';
 import { ProductCarousel } from './ProductCarousel';
@@ -37,6 +37,7 @@ export function ProductGrid({
   disabled,
 }: ProductGridProps) {
   const toggleNotification = useNotification();
+  const { get } = useFetchClient();
 
   const { formatMessage } = useIntl();
 
@@ -50,11 +51,9 @@ export function ProductGrid({
     async function fetchData(productId: string) {
       try {
         setIsLoading(true);
-        const productData = await request(`/commercetools/getProductById/${productId}`, {
-          method: 'GET',
-        });
+        const { data } = await get(`/commercetools/getProductById/${productId}`);
 
-        if (Object.keys(productData).length === 0) {
+        if (Object.keys(data).length === 0) {
           handleChange(null);
           toggleNotification({
             type: 'softWarning',
@@ -62,7 +61,7 @@ export function ProductGrid({
             title: 'Warning:',
           });
         } else {
-          setProductData(productData);
+          setProductData(data);
           setIsLoading(false);
         }
       } catch (e) {
