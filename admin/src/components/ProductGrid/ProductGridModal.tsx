@@ -44,15 +44,10 @@ export function ProductGridModal({
   const [productData, setProductData] = useState<Array<ProductModelType>>([]);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
-  console.log('selectedProductId', selectedProductId);
-  console.log('initialSelectedProductId', initialSelectedProductId);
-
   async function fetchData() {
     const data = await request('/commercetools/getAllProducts', {
       method: 'GET',
     });
-
-    console.log('data', data);
 
     setProductData(data);
   }
