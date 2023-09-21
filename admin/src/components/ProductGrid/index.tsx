@@ -57,11 +57,9 @@ export function ProductGrid({
         if (Object.keys(productData).length === 0) {
           handleChange(null);
           toggleNotification({
-            type: 'warning',
-            message: {
-              id: 'notification.error.product.notFound',
-              defaultMessage: "This product doesn't exist anymore.",
-            },
+            type: 'softWarning',
+            message: "This product doesn't exist anymore.",
+            title: 'Warning:',
           });
         } else {
           setProductData(productData);
@@ -73,10 +71,8 @@ export function ProductGrid({
         setIsLoading(false);
         toggleNotification({
           type: 'warning',
-          message: {
-            id: 'notification.error.internal',
-            defaultMessage: 'Something went wrong with the Commercetools server.',
-          },
+          message: 'Something went wrong with the Commercetools server.',
+          title: 'Error:',
         });
       }
     }
