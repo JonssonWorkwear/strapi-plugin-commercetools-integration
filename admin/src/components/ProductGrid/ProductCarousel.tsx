@@ -31,7 +31,7 @@ type ProductCarouselProps = {
   products: Array<{
     id: string;
     title?: string;
-    imageUrl?: string;
+    image?: string;
     price?: number;
   }>;
 };
@@ -106,7 +106,7 @@ export function ProductCarousel({
           >
             <Card id={`product-${product.id}`} style={{ width: '300px' }}>
               <CardHeader>
-                <CardAsset src={product.imageUrl} />
+                <CardAsset src={product.image} />
               </CardHeader>
               <CardBody>
                 <CardContent>

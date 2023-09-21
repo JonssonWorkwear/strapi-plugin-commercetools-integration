@@ -21,7 +21,7 @@ type ProductGridProps = {
 type ProductModelType = {
   id: string;
   title?: string;
-  imageUrl?: string;
+  image?: string;
   price?: number;
 };
 
@@ -48,9 +48,11 @@ export function ProductGrid({
         method: 'GET',
       });
 
-      // rename image to imageUrl
-      productData.imageUrl = productData.image;
-      setProductData([productData]);
+      if (Object.keys(productData).length === 0) {
+        handleChange(null);
+      } else {
+        setProductData([productData]);
+      }
     }
 
     if (value) {

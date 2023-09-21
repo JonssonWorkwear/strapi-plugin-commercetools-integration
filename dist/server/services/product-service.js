@@ -35,6 +35,9 @@ exports.default = ({ strapi }) => ({
             .execute();
         // TODO: WIP validation
         const productData = product.body.results[0];
+        if (!productData) {
+            return {};
+        }
         // TODO: WIP validation
         const name = productData.name[CT_DEFAULT_LOCALE];
         const description = (_a = productData.description) === null || _a === void 0 ? void 0 : _a[CT_DEFAULT_LOCALE];
