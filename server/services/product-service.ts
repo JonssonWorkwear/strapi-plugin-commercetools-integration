@@ -41,6 +41,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     // TODO: WIP validation
     const productData = product.body.results[0];
 
+    if (!productData) {
+      return {};
+    }
+
     // TODO: WIP validation
     const name = productData.name[CT_DEFAULT_LOCALE];
     const description = productData.description?.[CT_DEFAULT_LOCALE];

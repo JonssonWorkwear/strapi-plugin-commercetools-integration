@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, MessageDescriptor } from 'react-intl';
 
-import { request } from '@strapi/helper-plugin';
+import { useFetchClient, useNotification } from '@strapi/helper-plugin';
 
 import { ProductGridModal } from './ProductGridModal';
 import { ProductCarousel } from './ProductCarousel';
@@ -20,9 +20,9 @@ type ProductGridProps = {
 
 type ProductModelType = {
   id: string;
-  title?: string;
-  imageUrl?: string;
-  price?: number;
+  title: string;
+  image: string;
+  price: number;
 };
 
 export function ProductGrid({
@@ -36,27 +36,51 @@ export function ProductGrid({
   description,
   disabled,
 }: ProductGridProps) {
+  const toggleNotification = useNotification();
+  const { get } = useFetchClient();
+
   const { formatMessage } = useIntl();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [productData, setProductData] = useState<Array<ProductModelType> | null>(null);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [productData, setProductData] = useState<ProductModelType | null>(null);
 
   // Set initial productData
   useEffect(() => {
     async function fetchData(productId: string) {
-      const productData = await request(`/commercetools/getProductById/${productId}`, {
-        method: 'GET',
-      });
+      try {
+        setIsLoading(true);
+        const { data } = await get(`/commercetools/getProductById/${productId}`);
 
-      // rename image to imageUrl
-      productData.imageUrl = productData.image;
-      setProductData([productData]);
+        if (Object.keys(data).length === 0) {
+          handleChange(null);
+          toggleNotification({
+            type: 'softWarning',
+            message: "This product doesn't exist anymore.",
+            title: 'Warning:',
+          });
+        } else {
+          setProductData(data);
+          setIsLoading(false);
+        }
+      } catch (e) {
+        console.error(e);
+        setIsError(true);
+        setIsLoading(false);
+        toggleNotification({
+          type: 'warning',
+          message: 'Something went wrong with the Commercetools server.',
+          title: 'Error:',
+        });
+      }
     }
 
     if (value) {
       fetchData(value);
     } else {
-      setProductData([]);
+      setProductData(null);
+      setIsLoading(false);
     }
   }, [value]);
 
@@ -65,31 +89,30 @@ export function ProductGrid({
   function handleChange(productId: string | null) {
     onChange({ target: { name, value: productId } });
   }
+  return (
+    <>
+      <ProductCarousel
+        name={formatMessage(intlLabel)}
+        required={required}
+        error={error}
+        description={description}
+        disabled={disabled}
+        isError={isError}
+        isLoading={isLoading}
+        openModal={() => setIsModalOpen(true)}
+        onDelete={() => handleChange(null)}
+        product={productData}
+      />
 
-  if (productData) {
-    return (
-      <>
-        <ProductCarousel
-          name={formatMessage(intlLabel)}
-          required={required}
-          error={error}
-          description={description}
-          disabled={disabled}
-          openModal={() => setIsModalOpen(true)}
-          onDelete={() => handleChange(null)}
-          products={productData}
+      {isModalOpen ? (
+        <ProductGridModal
+          setIsModalOpen={setIsModalOpen}
+          initialSelectedProductId={value}
+          onFinish={(data) => {
+            handleChange(data);
+          }}
         />
-
-        {isModalOpen ? (
-          <ProductGridModal
-            setIsModalOpen={setIsModalOpen}
-            onFinish={(data) => {
-              handleChange(data);
-            }}
-            initialSelectedProductId={value}
-          />
-        ) : null}
-      </>
-    );
-  }
+      ) : null}
+    </>
+  );
 }

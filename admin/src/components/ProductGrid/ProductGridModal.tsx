@@ -15,7 +15,7 @@ import {
   Loader,
 } from '@strapi/design-system';
 
-import { request } from '@strapi/helper-plugin';
+import { useFetchClient } from '@strapi/helper-plugin';
 
 import { ProductCard } from './ProductCard';
 
@@ -41,18 +41,13 @@ export function ProductGridModal({
   onFinish,
   initialSelectedProductId,
 }: ProductGridModalProps) {
+  const { get } = useFetchClient();
+
   const [productData, setProductData] = useState<Array<ProductModelType>>([]);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
-  console.log('selectedProductId', selectedProductId);
-  console.log('initialSelectedProductId', initialSelectedProductId);
-
   async function fetchData() {
-    const data = await request('/commercetools/getAllProducts', {
-      method: 'GET',
-    });
-
-    console.log('data', data);
+    const { data } = await get('/commercetools/getAllProducts');
 
     setProductData(data);
   }

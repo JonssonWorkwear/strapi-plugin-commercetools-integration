@@ -31,7 +31,6 @@ const ctpClient = new sdk_client_v2_1.ClientBuilder()
     .withProjectKey(projectKey) // .withProjectKey() is not required if the projectKey is included in authMiddlewareOptions
     .withClientCredentialsFlow(authMiddlewareOptions)
     .withHttpMiddleware(httpMiddlewareOptions)
-    .withLoggerMiddleware() // Include middleware for logging
     .build();
 exports.client = (0, platform_sdk_1.createApiBuilderFromCtpClient)(ctpClient).withProjectKey({
     projectKey: CT_PROJECT_KEY,
