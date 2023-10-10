@@ -1,7 +1,7 @@
-import myController from './my-controller';
 import productController from './product-controller';
+import categoryController from './category-controller';
 
 export default {
-  myController,
   productController,
+  categoryController,
 };

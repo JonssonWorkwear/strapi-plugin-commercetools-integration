@@ -13,6 +13,6 @@ exports.default = ({ strapi }) => {
     strapi.customFields.register({
         name: 'CategoryList',
         plugin: 'commercetools',
-        type: 'enumeration',
+        type: 'text',
     });
 };

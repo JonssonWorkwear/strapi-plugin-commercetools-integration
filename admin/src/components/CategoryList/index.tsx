@@ -1,28 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useIntl, MessageDescriptor } from 'react-intl';
 
 import { useFetchClient, useNotification } from '@strapi/helper-plugin';
 
-import {
-  SingleSelect,
-  SingleSelectOption,
-  Field,
-  FieldLabel,
-  FieldHint,
-  FieldError,
-  Flex,
-} from '@strapi/design-system';
+import { SingleSelect, SingleSelectOption } from '@strapi/design-system';
 
 type CategoryListProps = {
-  intlLabel: MessageDescriptor;
   onChange: (event: { target: { name: string; value?: string | null; type?: string } }) => void;
   name: string;
-  description?: MessageDescriptor;
+  description?: string;
   disabled?: boolean;
   error?: string;
-  labelAction?: React.ReactNode;
   required?: boolean;
   value?: string;
+};
+
+type CategoryModelType = {
+  name: string;
+  slug: string;
 };
 
 export function CategoryList({
@@ -36,28 +30,66 @@ export function CategoryList({
 }: CategoryListProps) {
   const { get } = useFetchClient();
 
-  const [isError, setIsError] = useState<boolean>(false);
+  const toggleNotification = useNotification();
+
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(error);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [categoryData, setCategoryData] = useState<Array<CategoryModelType> | null>(null);
+
+  // Set initial productData
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const { data }: { data: Array<CategoryModelType> } = await get(
+          `/commercetools/getAllCategories`
+        );
+
+        setCategoryData(data);
+        setIsLoading(false);
+
+        // Check if any category returned is the previously set category
+        if (value && !data.some((category) => category.slug === value)) {
+          setErrorMessage("The category doesn't exist anymore.");
+          toggleNotification({
+            type: 'softWarning',
+            message: "This category doesn't exist anymore.",
+            title: 'Warning:',
+          });
+          onChange({ target: { name, value: null } });
+        }
+      } catch (e) {
+        console.error(e);
+        setErrorMessage('Something went wrong with the Commercetools server.');
+        setIsLoading(false);
+        toggleNotification({
+          type: 'warning',
+          message: 'Something went wrong with the Commercetools server.',
+          title: 'Error:',
+        });
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <SingleSelect
       label={name}
       required={required}
-      placeholder="Choose one category"
+      placeholder={isLoading ? 'Loading...' : 'Select a category'}
       hint={description}
-      error={error}
-      disabled={disabled}
+      error={errorMessage}
+      disabled={disabled || isLoading}
       value={value}
       onChange={(value: string) => onChange({ target: { name, value } })}
       onClear={() => onChange({ target: { name, value: null } })}
     >
-      <SingleSelectOption value="apple">Apple</SingleSelectOption>
-      <SingleSelectOption value="avocado">Avocado</SingleSelectOption>
-      <SingleSelectOption value="banana">Banana</SingleSelectOption>
-      <SingleSelectOption value="kiwi">Kiwi</SingleSelectOption>
-      <SingleSelectOption value="mango">Mango</SingleSelectOption>
-      <SingleSelectOption value="orange">Orange</SingleSelectOption>
-      <SingleSelectOption value="strawberry">Strawberry</SingleSelectOption>
+      {categoryData?.map((category) => (
+        <SingleSelectOption key={category.slug} value={category.slug}>
+          {category.name}
+        </SingleSelectOption>
+      ))}
     </SingleSelect>
   );
 }

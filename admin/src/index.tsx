@@ -54,7 +54,7 @@ export default {
     app.customFields.register({
       name: 'CategoryList',
       pluginId: pluginId,
-      type: 'enumeration',
+      type: 'text',
       icon: PluginIcon,
       intlLabel: {
         id: 'commercetools.categorylist.label',
