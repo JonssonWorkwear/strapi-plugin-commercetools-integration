@@ -5,7 +5,6 @@ export default [
     handler: 'productController.getAllProducts',
     config: {
       policies: [],
-      auth: false,
     },
   },
   {
@@ -14,7 +13,6 @@ export default [
     handler: 'productController.getProductById',
     config: {
       policies: [],
-      auth: false,
     },
   },
   {
@@ -23,7 +21,6 @@ export default [
     handler: 'categoryController.getAllCategories',
     config: {
       policies: [],
-      auth: false,
     },
   },
 ];
