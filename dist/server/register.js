@@ -10,4 +10,9 @@ exports.default = ({ strapi }) => {
             isResizable: false,
         },
     });
+    strapi.customFields.register({
+        name: 'CategoryList',
+        plugin: 'commercetools',
+        type: 'text',
+    });
 };
