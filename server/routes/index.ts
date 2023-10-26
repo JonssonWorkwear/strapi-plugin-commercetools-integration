@@ -9,8 +9,8 @@ export default [
   },
   {
     method: 'GET',
-    path: '/getProductById/:id',
-    handler: 'productController.getProductById',
+    path: '/getProductBySlug/:id',
+    handler: 'productController.getProductBySlug',
     config: {
       policies: [],
     },

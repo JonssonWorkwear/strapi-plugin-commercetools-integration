@@ -5,10 +5,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     ctx.body = await strapi.plugin('commercetools').service('productService').getAllProducts();
   },
 
-  async getProductById(ctx) {
+  async getProductBySlug(ctx) {
     ctx.body = await strapi
       .plugin('commercetools')
       .service('productService')
-      .getProductById(ctx.params.id);
+      .getProductBySlug(ctx.params.id);
   },
 });
