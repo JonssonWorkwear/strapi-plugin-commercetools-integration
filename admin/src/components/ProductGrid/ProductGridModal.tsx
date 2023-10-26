@@ -48,7 +48,6 @@ export function ProductGridModal({
 
   async function fetchData() {
     const { data } = await get('/commercetools/getAllProducts');
-    console.log('product', data);
 
     setProductData(data);
   }
@@ -88,7 +87,6 @@ export function ProductGridModal({
             <Grid>
               {productData.map((product) => {
                 const isSelected = selectedProductSlug === product.slug;
-                console.log('product', product);
 
                 return (
                   <ProductCard
