@@ -12,7 +12,7 @@ import {
 } from '@strapi/design-system';
 
 type ProductCardProps = {
-  id: string;
+  slug: string;
   title: string;
   price: number;
   image: string;
@@ -21,7 +21,7 @@ type ProductCardProps = {
 } & Record<string, any>;
 
 export function ProductCard({
-  id,
+  slug,
   title,
   price,
   image,

@@ -19,7 +19,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       return {
         title: name,
         description,
-        id: slug,
+        slug,
         image,
         price,
       };
@@ -28,12 +28,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     return productsData;
   },
 
-  async getProductById(id: string) {
+  async getProductBySlug(slug: string) {
     const product = await client
       .productProjections()
       .get({
         queryArgs: {
-          where: `slug(${CT_DEFAULT_LOCALE}="${id}")`,
+          where: `slug(${CT_DEFAULT_LOCALE}="${slug}")`,
         },
       })
       .execute();
@@ -45,19 +45,24 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       return {};
     }
 
-    // TODO: WIP validation
-    const name = productData.name[CT_DEFAULT_LOCALE];
-    const description = productData.description?.[CT_DEFAULT_LOCALE];
-    const slug = productData.slug?.[CT_DEFAULT_LOCALE];
-    const image = productData.masterVariant.images?.[0].url;
-    const price = productData.masterVariant.prices?.[0].value.centAmount;
-
     return {
-      title: name,
-      description,
-      id: slug,
-      image,
-      price,
+      title: productData.name[CT_DEFAULT_LOCALE],
+      description: productData.description?.[CT_DEFAULT_LOCALE],
+      slug: productData.slug?.[CT_DEFAULT_LOCALE],
+      image: productData.masterVariant.images?.[0].url,
+      price: productData.masterVariant.prices?.[0].value.centAmount,
     };
+  },
+
+  async updateProductById(id: string, body: any) {
+    const productUpdate = await client
+      .products()
+      .withId({ ID: id })
+      .post({
+        body,
+      })
+      .execute();
+
+    return productUpdate;
   },
 });

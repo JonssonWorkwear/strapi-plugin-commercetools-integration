@@ -11,15 +11,23 @@ import {
 } from '@strapi/design-system';
 
 type ProductCarouselProductCardProps = {
-  id: string;
+  slug: string;
   title: string;
   image: string;
   price: number;
 };
 
-export function ProductCarouselCard({ id, title, image, price }: ProductCarouselProductCardProps) {
+export function ProductCarouselCard({
+  slug,
+  title,
+  image,
+  price,
+}: ProductCarouselProductCardProps) {
   return (
-    <Card id={`product-${id}`} style={{ width: '300px', marginTop: '18px', marginBottom: '18px' }}>
+    <Card
+      id={`product-${slug}`}
+      style={{ width: '300px', marginTop: '18px', marginBottom: '18px' }}
+    >
       <CardHeader>
         <CardAsset src={image} />
       </CardHeader>

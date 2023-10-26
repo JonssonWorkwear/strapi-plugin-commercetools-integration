@@ -25,12 +25,12 @@ const Grid = styled(GridLayout)`
 
 type ProductGridModalProps = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onFinish: (selectedProductId: string | null) => void;
-  initialSelectedProductId?: string | null;
+  onFinish: (selectedProductSlug: string | null) => void;
+  initialSelectedProductSlug?: string | null;
 };
 
 type ProductModelType = {
-  id: string;
+  slug: string;
   title: string;
   price: number;
   image: string;
@@ -39,12 +39,12 @@ type ProductModelType = {
 export function ProductGridModal({
   setIsModalOpen,
   onFinish,
-  initialSelectedProductId,
+  initialSelectedProductSlug,
 }: ProductGridModalProps) {
   const { get } = useFetchClient();
 
   const [productData, setProductData] = useState<Array<ProductModelType>>([]);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductSlug, setSelectedProductSlug] = useState<string | null>(null);
 
   async function fetchData() {
     const { data } = await get('/commercetools/getAllProducts');
@@ -54,7 +54,7 @@ export function ProductGridModal({
 
   function onClose() {
     // Close the modal if the value didn't change
-    if (initialSelectedProductId === selectedProductId) {
+    if (initialSelectedProductSlug === selectedProductSlug) {
       setIsModalOpen((prev) => !prev);
     } else {
       const result = window.confirm(
@@ -67,8 +67,8 @@ export function ProductGridModal({
   }
 
   useEffect(() => {
-    if (initialSelectedProductId) {
-      setSelectedProductId(initialSelectedProductId);
+    if (initialSelectedProductSlug) {
+      setSelectedProductSlug(initialSelectedProductSlug);
     }
 
     fetchData();
@@ -86,18 +86,18 @@ export function ProductGridModal({
           {productData.length > 0 ? (
             <Grid>
               {productData.map((product) => {
-                const isSelected = selectedProductId === product.id;
+                const isSelected = selectedProductSlug === product.slug;
 
                 return (
                   <ProductCard
-                    key={`product-${product.id}`}
-                    id={product.id}
+                    key={`product-${product.slug}`}
+                    slug={product.slug}
                     title={product.title}
                     price={product.price}
                     image={product.image}
                     selected={isSelected}
                     onSelection={() => {
-                      setSelectedProductId(product.id);
+                      setSelectedProductSlug(product.slug);
                     }}
                   />
                 );
@@ -121,7 +121,7 @@ export function ProductGridModal({
             <Button
               onClick={() => {
                 setIsModalOpen((prev) => !prev);
-                onFinish(selectedProductId);
+                onFinish(selectedProductSlug);
               }}
             >
               Finish

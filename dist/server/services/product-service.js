@@ -16,20 +16,20 @@ exports.default = ({ strapi }) => ({
             return {
                 title: name,
                 description,
-                id: slug,
+                slug,
                 image,
                 price,
             };
         });
         return productsData;
     },
-    async getProductById(id) {
+    async getProductBySlug(slug) {
         var _a, _b, _c, _d;
         const product = await client_1.client
             .productProjections()
             .get({
             queryArgs: {
-                where: `slug(${CT_DEFAULT_LOCALE}="${id}")`,
+                where: `slug(${CT_DEFAULT_LOCALE}="${slug}")`,
             },
         })
             .execute();
@@ -38,18 +38,22 @@ exports.default = ({ strapi }) => ({
         if (!productData) {
             return {};
         }
-        // TODO: WIP validation
-        const name = productData.name[CT_DEFAULT_LOCALE];
-        const description = (_a = productData.description) === null || _a === void 0 ? void 0 : _a[CT_DEFAULT_LOCALE];
-        const slug = (_b = productData.slug) === null || _b === void 0 ? void 0 : _b[CT_DEFAULT_LOCALE];
-        const image = (_c = productData.masterVariant.images) === null || _c === void 0 ? void 0 : _c[0].url;
-        const price = (_d = productData.masterVariant.prices) === null || _d === void 0 ? void 0 : _d[0].value.centAmount;
         return {
-            title: name,
-            description,
-            id: slug,
-            image,
-            price,
+            title: productData.name[CT_DEFAULT_LOCALE],
+            description: (_a = productData.description) === null || _a === void 0 ? void 0 : _a[CT_DEFAULT_LOCALE],
+            slug: (_b = productData.slug) === null || _b === void 0 ? void 0 : _b[CT_DEFAULT_LOCALE],
+            image: (_c = productData.masterVariant.images) === null || _c === void 0 ? void 0 : _c[0].url,
+            price: (_d = productData.masterVariant.prices) === null || _d === void 0 ? void 0 : _d[0].value.centAmount,
         };
+    },
+    async updateProductById(id, body) {
+        const productUpdate = await client_1.client
+            .products()
+            .withId({ ID: id })
+            .post({
+            body,
+        })
+            .execute();
+        return productUpdate;
     },
 });

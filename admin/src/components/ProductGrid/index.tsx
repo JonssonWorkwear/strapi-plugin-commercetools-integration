@@ -19,7 +19,7 @@ type ProductGridProps = {
 };
 
 type ProductModelType = {
-  id: string;
+  slug: string;
   title: string;
   image: string;
   price: number;
@@ -48,10 +48,10 @@ export function ProductGrid({
 
   // Set initial productData
   useEffect(() => {
-    async function fetchData(productId: string) {
+    async function fetchData(productSlug: string) {
       try {
         setIsLoading(true);
-        const { data } = await get(`/commercetools/getProductById/${productId}`);
+        const { data } = await get(`/commercetools/getProductBySlug/${productSlug}`);
 
         if (Object.keys(data).length === 0) {
           handleChange(null);
@@ -86,8 +86,8 @@ export function ProductGrid({
 
   // Update the selected product data and the value
   // of the entry – visible to the API!
-  function handleChange(productId: string | null) {
-    onChange({ target: { name, value: productId } });
+  function handleChange(productSlug: string | null) {
+    onChange({ target: { name, value: productSlug } });
   }
   return (
     <>
@@ -107,7 +107,7 @@ export function ProductGrid({
       {isModalOpen ? (
         <ProductGridModal
           setIsModalOpen={setIsModalOpen}
-          initialSelectedProductId={value}
+          initialSelectedProductSlug={value}
           onFinish={(data) => {
             handleChange(data);
           }}

@@ -2,16 +2,6 @@ import React from 'react';
 
 import { ProductCarouselCard } from './ProductCarouselCard';
 
-import {
-  CarouselSlide,
-  Card,
-  CardHeader,
-  CardAsset,
-  CardBody,
-  CardContent,
-  CardTitle,
-  CardSubtitle,
-} from '@strapi/design-system';
 import { ProductCarouselEmpty } from './ProductCarouselEmpty';
 import { ProductCarouselError } from './ProductCarouselError';
 import { ProductCarouselLoading } from './ProductCarouselLoading';
@@ -22,7 +12,7 @@ type ProductCarouselSlideProps = {
   isLoading: boolean;
   openModal: () => void;
   product?: {
-    id: string;
+    slug: string;
     title: string;
     image: string;
     price: number;
@@ -43,7 +33,7 @@ export function ProductCarouselSlide({
   } else if (product) {
     return (
       <ProductCarouselCard
-        id={product.id}
+        slug={product.slug}
         title={product.title}
         price={product.price}
         image={product.image}

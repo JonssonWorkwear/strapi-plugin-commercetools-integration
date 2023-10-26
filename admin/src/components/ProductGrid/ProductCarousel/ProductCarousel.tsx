@@ -18,7 +18,7 @@ type ProductCarouselProps = {
   isError: boolean;
   isLoading: boolean;
   product?: {
-    id: string;
+    slug: string;
     title: string;
     image: string;
     price: number;
