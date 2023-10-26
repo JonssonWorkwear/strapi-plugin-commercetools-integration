@@ -46,4 +46,14 @@ exports.default = ({ strapi }) => ({
             price: (_d = productData.masterVariant.prices) === null || _d === void 0 ? void 0 : _d[0].value.centAmount,
         };
     },
+    async updateProductById(id, body) {
+        const productUpdate = await client_1.client
+            .products()
+            .withId({ ID: id })
+            .post({
+            body,
+        })
+            .execute();
+        return productUpdate;
+    },
 });
