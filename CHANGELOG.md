@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.8.0...v1.8.1) (2023-11-02)
+
+
+### Bug Fixes
+
+* Delete dist directory ([df924b3](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/df924b30bc25f6de2c18fd588bcd01ecbb5a6f1f))
+
 # [1.8.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.7.4...v1.8.0) (2023-11-02)
 
 
