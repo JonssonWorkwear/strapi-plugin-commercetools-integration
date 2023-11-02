@@ -25,6 +25,12 @@ jobs:
         run: yarn install
       - name: Building package
         run: yarn build
+      - name: Remove dist from .gitignore
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "dist"
+          replace: ""
+          include: ".gitignore"
       - name: Create semantic release and publish
         run: npx semantic-release
         env:
