@@ -2,30 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("./commercetools/client");
 const { CT_DEFAULT_LOCALE = 'en-ZA' } = process.env;
-exports.default = ({ strapi }) => ({
-    async getAllProducts() {
-        const products = await client_1.client.productProjections().get().execute();
-        const productsData = products.body.results.map((product) => {
-            var _a, _b, _c, _d;
-            // TODO: WIP validation
-            const name = product.name[CT_DEFAULT_LOCALE];
-            const description = (_a = product.description) === null || _a === void 0 ? void 0 : _a[CT_DEFAULT_LOCALE];
-            const slug = (_b = product.slug) === null || _b === void 0 ? void 0 : _b[CT_DEFAULT_LOCALE];
-            const image = (_c = product.masterVariant.images) === null || _c === void 0 ? void 0 : _c[0].url;
-            const price = (_d = product.masterVariant.prices) === null || _d === void 0 ? void 0 : _d[0].value.centAmount;
-            return {
-                title: name,
-                description,
-                slug,
-                image,
-                price,
-            };
-        });
-        return productsData;
+exports.default = () => ({
+    getAllProducts() {
+        return client_1.client.productProjections().get().execute();
     },
-    async getProductBySlug(slug) {
-        var _a, _b, _c, _d;
-        const product = await client_1.client
+    getProductBySlug(slug) {
+        return client_1.client
             .productProjections()
             .get({
             queryArgs: {
@@ -33,27 +15,14 @@ exports.default = ({ strapi }) => ({
             },
         })
             .execute();
-        // TODO: WIP validation
-        const productData = product.body.results[0];
-        if (!productData) {
-            return {};
-        }
-        return {
-            title: productData.name[CT_DEFAULT_LOCALE],
-            description: (_a = productData.description) === null || _a === void 0 ? void 0 : _a[CT_DEFAULT_LOCALE],
-            slug: (_b = productData.slug) === null || _b === void 0 ? void 0 : _b[CT_DEFAULT_LOCALE],
-            image: (_c = productData.masterVariant.images) === null || _c === void 0 ? void 0 : _c[0].url,
-            price: (_d = productData.masterVariant.prices) === null || _d === void 0 ? void 0 : _d[0].value.centAmount,
-        };
     },
-    async updateProductById(id, body) {
-        const productUpdate = await client_1.client
+    updateProductById(id, body) {
+        return client_1.client
             .products()
             .withId({ ID: id })
             .post({
             body,
         })
             .execute();
-        return productUpdate;
     },
 });
