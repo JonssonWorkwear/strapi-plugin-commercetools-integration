@@ -21,6 +21,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Install dependencies
+        run: yarn install
+      - name: Building package
+        run: yarn build
       - name: Create semantic release and publish
         run: npx semantic-release
         env:

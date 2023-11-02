@@ -1,8 +1,6 @@
-import { Strapi } from '@strapi/strapi';
-
 import { client } from './commercetools/client';
 
-export default ({ strapi }: { strapi: Strapi }) => ({
+export default () => ({
   async createCustomObject({
     container,
     key,
@@ -12,13 +10,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     key: string;
     value: string;
   }) {
-    console.log('createCustomObject', {
-      container,
-      key,
-      value,
-    });
-
-    const customObject = await client
+    return client
       .customObjects()
       .post({
         body: {
@@ -28,13 +20,5 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         },
       })
       .execute();
-
-    // Thrown errors are caught by the admin error handler
-    return {
-      id: customObject.body.id,
-      container: customObject.body.container,
-      key: customObject.body.key,
-      value: customObject.body.value,
-    };
   },
 });
