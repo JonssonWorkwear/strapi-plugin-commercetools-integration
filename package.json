@@ -32,7 +32,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": [ "dist" ],
+  "files": [
+    "./dist",
+    "./admin",
+    "strapi-server.js",
+    "strapi-admin.js"
+  ],
   "release": {
     "branches": [
       "release"
