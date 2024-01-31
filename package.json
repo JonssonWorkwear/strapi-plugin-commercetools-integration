@@ -1,6 +1,6 @@
 {
   "name": "@jonssonworkwear/strapi-plugin-commercetools-integration",
-  "version": "1.8.2",
+  "version": "1.9.0",
   "description": "This is the description of the plugin.",
   "strapi": {
     "name": "commercetools",

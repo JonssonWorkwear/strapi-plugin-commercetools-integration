@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.8.2...v1.9.0) (2024-01-31)
+
+
+### Features
+
+* Add price placeholder to admin ([f37ca0b](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/f37ca0b58dd67f46f06f9badfed6286f69c98480))
+
 ## [1.8.2](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.8.1...v1.8.2) (2024-01-31)
 
 
