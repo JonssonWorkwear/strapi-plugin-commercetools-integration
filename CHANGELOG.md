@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.8.1...v1.8.2) (2024-01-31)
+
+
+### Bug Fixes
+
+* Update placeholder image and price ([cca1c7a](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/cca1c7a79e8b5a2181785c600bbc51357d51d7b9))
+
 ## [1.8.1](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.8.0...v1.8.1) (2023-11-02)
 
 
