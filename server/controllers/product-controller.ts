@@ -1,11 +1,9 @@
 import { Strapi } from '@strapi/strapi';
 
-const { CT_DEFAULT_LOCALE = 'en-ZA' } = process.env;
+const { CT_DEFAULT_LOCALE = 'en-ZA', CT_PLACEHOLDER_IMG_URL } = process.env;
 
 export default ({ strapi }: { strapi: Strapi }) => ({
   async getAllProducts(ctx) {
-    console.log('controller!');
-
     const products = await strapi
       .plugin('commercetools')
       .service('productService')
@@ -18,8 +16,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         title: product.name[CT_DEFAULT_LOCALE],
         description: product.description?.[CT_DEFAULT_LOCALE],
         slug: product.slug?.[CT_DEFAULT_LOCALE],
-        image: product.masterVariant.images?.[0].url,
-        price: product.masterVariant.prices?.[0].value.centAmount,
+        image: product.masterVariant.images[0]
+          ? product.masterVariant.images[0].url
+          : CT_PLACEHOLDER_IMG_URL,
+        price: product.masterVariant.prices[0]
+          ? product.masterVariant.prices[0].value.centAmount
+          : 0,
       };
     });
 
@@ -44,8 +46,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       title: productData.name[CT_DEFAULT_LOCALE],
       description: productData.description?.[CT_DEFAULT_LOCALE],
       slug: productData.slug?.[CT_DEFAULT_LOCALE],
-      image: productData.masterVariant.images?.[0].url,
-      price: productData.masterVariant.prices?.[0].value.centAmount,
+      image: productData.masterVariant.images[0]
+        ? productData.masterVariant.images[0].url
+        : CT_PLACEHOLDER_IMG_URL,
+      price: productData.masterVariant.prices[0]
+        ? productData.masterVariant.prices[0].value.centAmount
+        : 0,
     };
   },
 });
