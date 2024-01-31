@@ -20,6 +20,14 @@ type ProductCardProps = {
   onSelection: () => void;
 } & Record<string, any>;
 
+function formatPrice(price: number) {
+  return new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR',
+    minimumFractionDigits: 2,
+  }).format(price);
+}
+
 export function ProductCard({
   slug,
   title,
@@ -38,7 +46,9 @@ export function ProductCard({
       <CardBody>
         <CardContent>
           <CardTitle>{title}</CardTitle>
-          <CardSubtitle>R{price}</CardSubtitle>
+          <CardSubtitle>
+            {price !== 0 ? formatPrice(price / 100) : 'Price unavailable'}
+          </CardSubtitle>
         </CardContent>
         {/* <CardBadge>Doc</CardBadge> */}
       </CardBody>
