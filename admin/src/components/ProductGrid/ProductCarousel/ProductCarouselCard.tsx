@@ -17,6 +17,14 @@ type ProductCarouselProductCardProps = {
   price: number;
 };
 
+function formatPrice(price: number) {
+  return new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR',
+    minimumFractionDigits: 2,
+  }).format(price);
+}
+
 export function ProductCarouselCard({
   slug,
   title,
@@ -34,7 +42,9 @@ export function ProductCarouselCard({
       <CardBody>
         <CardContent>
           <CardTitle>{title}</CardTitle>
-          <CardSubtitle>R{price}</CardSubtitle>
+          <CardSubtitle>
+            {price !== 0 ? formatPrice(price / 100) : 'Price unavailable'}
+          </CardSubtitle>
         </CardContent>
       </CardBody>
     </Card>
