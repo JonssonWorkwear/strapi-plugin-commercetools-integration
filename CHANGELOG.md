@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.9.0...v1.10.0) (2024-02-19)
+
+
+### Features
+
+* Refactor category controller to include parent categories in the name ([097d2cc](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/097d2cc08a9da274970906d29c72a425932dac95))
+
 # [1.9.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.8.2...v1.9.0) (2024-01-31)
 
 
