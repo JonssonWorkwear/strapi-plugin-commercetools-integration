@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.11.0...v1.12.0) (2024-02-28)
+
+
+### Features
+
+* Order categories by name in category controller ([d30dd8c](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/d30dd8c0f3f8b4451a8601413446ba21b9b6bf0b))
+
 # [1.11.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.10.0...v1.11.0) (2024-02-28)
 
 
