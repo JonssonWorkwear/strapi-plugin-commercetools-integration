@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.10.0...v1.11.0) (2024-02-28)
+
+
+### Features
+
+* Refactor product controller to sort products by image count. Add types ([f3e83a9](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/f3e83a9ebae002c9cb4afdfc771e832546c6e370))
+
 # [1.10.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.9.0...v1.10.0) (2024-02-19)
 
 
