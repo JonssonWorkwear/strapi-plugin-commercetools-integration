@@ -4,7 +4,14 @@ const { CT_DEFAULT_LOCALE = 'en-ZA' } = process.env;
 
 export default () => ({
   getAllProducts() {
-    return client.productProjections().get().execute();
+    return client
+      .productProjections()
+      .get({
+        queryArgs: {
+          limit: 100,
+        },
+      })
+      .execute();
   },
 
   getProductBySlug(slug: string) {

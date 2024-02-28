@@ -1,13 +1,31 @@
+import { ClientResponse, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 import { Strapi } from '@strapi/strapi';
 
 const { CT_DEFAULT_LOCALE = 'en-ZA', CT_PLACEHOLDER_IMG_URL } = process.env;
 
 export default ({ strapi }: { strapi: Strapi }) => ({
   async getAllProducts(ctx) {
-    const products = await strapi
+    const products = (await strapi
       .plugin('commercetools')
       .service('productService')
-      .getAllProducts();
+      .getAllProducts()) as ClientResponse<ProductProjectionPagedQueryResponse>;
+
+    // Re-arrange the data to be have the products with images first
+    products.body.results.sort((a, b) => {
+      if (!a.masterVariant.images || !b.masterVariant.images) {
+        return 0;
+      }
+
+      if (a.masterVariant.images.length > b.masterVariant.images.length) {
+        return -1;
+      }
+
+      if (a.masterVariant.images.length < b.masterVariant.images.length) {
+        return 1;
+      }
+
+      return 0;
+    });
 
     // Filter down only the necessary fields
     // Throw errors are picked up by the client as 500
@@ -16,11 +34,15 @@ export default ({ strapi }: { strapi: Strapi }) => ({
         title: product.name[CT_DEFAULT_LOCALE],
         description: product.description?.[CT_DEFAULT_LOCALE],
         slug: product.slug?.[CT_DEFAULT_LOCALE],
-        image: product.masterVariant.images[0]
-          ? product.masterVariant.images[0].url
+        image: product.masterVariant.images
+          ? product.masterVariant.images[0]
+            ? product.masterVariant.images[0].url
+            : CT_PLACEHOLDER_IMG_URL
           : CT_PLACEHOLDER_IMG_URL,
-        price: product.masterVariant.prices[0]
-          ? product.masterVariant.prices[0].value.centAmount
+        price: product.masterVariant.prices
+          ? product.masterVariant.prices[0]
+            ? product.masterVariant.prices[0].value.centAmount
+            : 0
           : 0,
       };
     });
@@ -29,10 +51,10 @@ export default ({ strapi }: { strapi: Strapi }) => ({
   },
 
   async getProductBySlug(ctx) {
-    const product = await strapi
+    const product = (await strapi
       .plugin('commercetools')
       .service('productService')
-      .getProductBySlug(ctx.params.id);
+      .getProductBySlug(ctx.params.id)) as ClientResponse<ProductProjectionPagedQueryResponse>;
 
     const productData = product.body.results[0];
 
@@ -46,11 +68,15 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       title: productData.name[CT_DEFAULT_LOCALE],
       description: productData.description?.[CT_DEFAULT_LOCALE],
       slug: productData.slug?.[CT_DEFAULT_LOCALE],
-      image: productData.masterVariant.images[0]
-        ? productData.masterVariant.images[0].url
+      image: productData.masterVariant.images
+        ? productData.masterVariant.images[0]
+          ? productData.masterVariant.images[0].url
+          : CT_PLACEHOLDER_IMG_URL
         : CT_PLACEHOLDER_IMG_URL,
-      price: productData.masterVariant.prices[0]
-        ? productData.masterVariant.prices[0].value.centAmount
+      price: productData.masterVariant.prices
+        ? productData.masterVariant.prices[0]
+          ? productData.masterVariant.prices[0].value.centAmount
+          : 0
         : 0,
     };
   },
