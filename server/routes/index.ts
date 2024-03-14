@@ -23,4 +23,12 @@ export default [
       policies: [],
     },
   },
+  {
+    method: 'POST',
+    path: '/url/generate',
+    handler: 'urlController.getUrlBySlug',
+    config: {
+      policies: [],
+    },
+  },
 ];
