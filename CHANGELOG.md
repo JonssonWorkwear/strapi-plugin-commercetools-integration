@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.13.0...v1.13.1) (2024-03-14)
+
+
+### Bug Fixes
+
+* Remove console logs ([cb8c6d6](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/cb8c6d6654352f84329520d8eb8bce408e4216e5))
+
 # [1.13.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.12.0...v1.13.0) (2024-03-14)
 
 
