@@ -1,3 +1,11 @@
+# [1.13.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.12.0...v1.13.0) (2024-03-14)
+
+
+### Features
+
+* Add admin for the UrlTextField ([d84f2f1](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/d84f2f1f6f813a3e4c390d2c1cd7670950566fbc))
+* Add url service/controller/route ([9cd0822](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/9cd0822386ce20deecf24580beaf8e0e12c1f21b))
+
 # [1.12.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.11.0...v1.12.0) (2024-02-28)
 
 
