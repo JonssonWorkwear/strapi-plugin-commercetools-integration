@@ -15,4 +15,9 @@ export default ({ strapi }: { strapi: Strapi }) => {
     plugin: 'commercetools',
     type: 'text',
   });
+  strapi.customFields.register({
+    name: 'UrlTextField',
+    plugin: 'commercetools',
+    type: 'text',
+  });
 };

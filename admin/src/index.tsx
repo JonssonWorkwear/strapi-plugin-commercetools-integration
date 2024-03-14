@@ -95,6 +95,51 @@ export default {
         ],
       },
     });
+
+    app.customFields.register({
+      name: 'UrlTextField',
+      pluginId: pluginId,
+      type: 'text',
+      icon: PluginIcon,
+      intlLabel: {
+        id: 'commercetools.url.label',
+        defaultMessage: 'URL Field',
+      },
+      intlDescription: {
+        id: 'commercetools.description',
+        defaultMessage: 'List of product categories, then pick one',
+      },
+      components: {
+        Input: async () =>
+          import(
+            /* webpackChunkName: "commercetools-plugin-category-list-component" */ './components/UrlTextField'
+          ).then((module) => ({ default: module.UrlTextField })),
+      },
+      options: {
+        advanced: [
+          {
+            sectionTitle: {
+              id: 'commercetools.settings',
+              defaultMessage: 'Settings',
+            },
+            items: [
+              {
+                name: 'required',
+                type: 'checkbox',
+                intlLabel: {
+                  id: 'commercetools.required.label',
+                  defaultMessage: 'Required field',
+                },
+                description: {
+                  id: 'commercetools.required.description',
+                  defaultMessage: "You won't be able to create an entry if this field is empty",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
   },
 
   async registerTrads({ locales }: { locales: string[] }) {
