@@ -4,7 +4,14 @@ const { CT_DEFAULT_LOCALE = 'en-ZA' } = process.env;
 
 export default () => ({
   async getAllCategories() {
-    return client.categories().get().execute();
+    return client
+      .categories()
+      .get({
+        queryArgs: {
+          limit: 100,
+        },
+      })
+      .execute();
   },
 
   async getCategoryById(id: string) {
