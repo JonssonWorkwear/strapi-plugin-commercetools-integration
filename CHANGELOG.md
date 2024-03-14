@@ -1,3 +1,16 @@
+# [1.14.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.13.1...v1.14.0) (2024-03-14)
+
+
+### Bug Fixes
+
+* Add label to category list ([cece5f9](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/cece5f9bfa233c671caf322a834cdbe35d6f5d75))
+
+
+### Features
+
+* Add ancestors slugs to url service ([ba9aa6c](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/ba9aa6c3cfa608983a67cc51a19d495148c9ac8e))
+* Refactor getAllCategories method to limit to 100 ([fd21fff](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/fd21fff583c5974e88deac7fa98f43583ef80079))
+
 ## [1.13.1](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.13.0...v1.13.1) (2024-03-14)
 
 
