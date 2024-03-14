@@ -4,10 +4,13 @@ import { useFetchClient, useNotification } from '@strapi/helper-plugin';
 
 import { SingleSelect, SingleSelectOption } from '@strapi/design-system';
 
+import { useIntl, MessageDescriptor } from 'react-intl';
+
 type CategoryListProps = {
   onChange: (event: { target: { name: string; value?: string | null; type?: string } }) => void;
   name: string;
-  description?: string;
+  intlLabel: MessageDescriptor;
+  hint?: string;
   disabled?: boolean;
   error?: string;
   required?: boolean;
@@ -21,14 +24,17 @@ type CategoryModelType = {
 
 export function CategoryList({
   name,
+  intlLabel,
   onChange,
   value,
   required,
   error,
-  description,
+  hint,
   disabled,
 }: CategoryListProps) {
   const { get } = useFetchClient();
+
+  const { formatMessage } = useIntl();
 
   const toggleNotification = useNotification();
 
@@ -75,10 +81,11 @@ export function CategoryList({
 
   return (
     <SingleSelect
-      label={name}
+      label={formatMessage(intlLabel)}
+      name={name}
       required={required}
       placeholder={isLoading ? 'Loading...' : 'Select a category'}
-      hint={description}
+      hint={hint}
       error={errorMessage}
       disabled={disabled || isLoading}
       value={value}
