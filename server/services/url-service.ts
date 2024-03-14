@@ -1,11 +1,19 @@
-const { WEBSITE_PUBLIC_URL } = process.env;
+import { Strapi } from '@strapi/strapi';
+
+import type {
+  Category,
+  CategoryPagedQueryResponse,
+  ClientResponse,
+} from '@commercetools/platform-sdk';
+
+const { WEBSITE_PUBLIC_URL, CT_DEFAULT_LOCALE = 'en-ZA' } = process.env;
 
 export default () => ({
   // This is a simple service that returns a URL based on the type and slug
   // It is used to generate URLs for the content pages
   // At the moment, the types are hardcoded so there is less friction for
   // content editors, I figured it would be better to have a simple service
-  getUrlBySlug(contentTypeUID: string, data: any): string {
+  async getUrlBySlug(contentTypeUID: string, data: any): Promise<string> {
     const domain = WEBSITE_PUBLIC_URL
       ? WEBSITE_PUBLIC_URL.replace(/\/$/, '')
       : 'https://jonssonworkwear.net';
@@ -28,7 +36,65 @@ export default () => ({
           return `${domain}/categories/`;
         }
 
-        return `${domain}/categories/${data}`;
+        const categoryData = (await strapi
+          .plugin('commercetools')
+          .service('categoryService')
+          .getCategoryBySlug(slug)) as ClientResponse<CategoryPagedQueryResponse>;
+
+        if (!categoryData || !categoryData.body.results.length) {
+          return `${domain}/categories/${slug}`;
+        }
+
+        const ancestorsSlugs = await Promise.all(
+          categoryData.body.results[0].ancestors.map(async (ancestor) => {
+            const ancestorData = (await strapi
+              .plugin('commercetools')
+              .service('categoryService')
+              .getCategoryById(ancestor.id)) as ClientResponse<Category>;
+
+            return ancestorData.body.slug[CT_DEFAULT_LOCALE];
+          })
+        );
+
+        if (ancestorsSlugs.length) {
+          return `${domain}/categories/${ancestorsSlugs.join('/')}/${slug}`;
+        }
+
+        return `${domain}/categories/${slug}`;
+      }
+
+      case 'api::product-listing-page.product-listing-page': {
+        const slug = data.category_id;
+
+        if (!slug) {
+          return `${domain}/products/`;
+        }
+
+        const categoryData = (await strapi
+          .plugin('commercetools')
+          .service('categoryService')
+          .getCategoryBySlug(slug)) as ClientResponse<CategoryPagedQueryResponse>;
+
+        if (!categoryData || !categoryData.body.results.length) {
+          return `${domain}/products/${slug}`;
+        }
+
+        const ancestorsSlugs = await Promise.all(
+          categoryData.body.results[0].ancestors.map(async (ancestor) => {
+            const ancestorData = (await strapi
+              .plugin('commercetools')
+              .service('categoryService')
+              .getCategoryById(ancestor.id)) as ClientResponse<Category>;
+
+            return ancestorData.body.slug[CT_DEFAULT_LOCALE];
+          })
+        );
+
+        if (ancestorsSlugs.length) {
+          return `${domain}/products/${ancestorsSlugs.join('/')}/${slug}`;
+        }
+
+        return `${domain}/products/${slug}`;
       }
 
       case 'api::content-page.content-page': {
@@ -58,16 +124,6 @@ export default () => ({
         }
 
         return `${domain}/${slug}`;
-      }
-
-      case 'api::product-listing-page.product-listing-page': {
-        const slug = data.category_id;
-
-        if (!slug) {
-          return `${domain}/products/`;
-        }
-
-        return `${domain}/products/${slug}`;
       }
 
       case 'api::solution.solution': {
