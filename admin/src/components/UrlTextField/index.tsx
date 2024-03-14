@@ -45,7 +45,6 @@ export function UrlTextField({
           contentTypeUID,
           data: modifiedData,
         });
-        console.log('data', data);
         onChange({ target: { name, value: data } });
       } catch (e) {
         console.error(e);
