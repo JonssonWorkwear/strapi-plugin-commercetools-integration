@@ -21,12 +21,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     // Throw errors are picked up by the client as 500
     const productsData = products.body.results.map((product) => {
       return {
-        pagination: {
-          total: products.body.total,
-          count: products.body.count,
-          page: products.body.offset,
-          limit: products.body.limit,
-        },
         title: product.name[CT_DEFAULT_LOCALE],
         description: product.description?.[CT_DEFAULT_LOCALE],
         slug: product.slug?.[CT_DEFAULT_LOCALE],
@@ -43,7 +37,15 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       };
     });
 
-    ctx.body = productsData;
+    ctx.body = {
+      pagination: {
+        total: products.body.total,
+        count: products.body.count,
+        offset: products.body.offset,
+        limit: products.body.limit,
+      },
+      results: productsData,
+    };
   },
 
   async getProductBySlug(ctx) {

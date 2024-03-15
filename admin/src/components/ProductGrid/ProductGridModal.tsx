@@ -59,7 +59,7 @@ export function ProductGridModal({
     setIsLoading(true);
     const { data } = await get(`/commercetools/getAllProducts?page=${page}&search=${search}`);
 
-    setProductData(data);
+    setProductData(data.results);
     setIsLoading(false);
   }
 
@@ -82,7 +82,7 @@ export function ProductGridModal({
       setSelectedProductSlug(initialSelectedProductSlug);
     }
 
-    fetchData();
+    // fetchData();
   }, []);
 
   useEffect(() => {
