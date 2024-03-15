@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import { useDebounce } from 'use-debounce';
-
 import styled from 'styled-components';
 
 import {
@@ -20,6 +18,9 @@ import {
 } from '@strapi/design-system';
 
 import { useFetchClient, NoContent } from '@strapi/helper-plugin';
+
+import { useDebounce } from 'use-debounce';
+import { useInView } from 'react-intersection-observer';
 
 import { ProductCard } from './ProductCard';
 
@@ -55,16 +56,45 @@ export function ProductGridModal({
   const [searchValue, setSearchValue] = useState<string>('');
   const [debouncedSearchValue] = useDebounce(searchValue, 300);
 
-  async function fetchData(page: number = 1, search: string = '') {
-    setIsLoading(true);
-    const { data } = await get(`/commercetools/getAllProducts?page=${page}&search=${search}`);
+  // Pagination hooks
+  const { ref, inView, entry } = useInView({ threshold: 1 });
+  const [debouncedInView] = useDebounce(inView, 250);
 
-    setProductData(data.results);
-    setIsLoading(false);
+  const [hasMorePages, setHasMorePages] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  async function fetchData(search: string = '') {
+    // Fetch data only if there are more pages to fetch
+    // or it's the first fetch
+    if (hasMorePages || currentPage === 0) {
+      setIsLoading(true);
+
+      const { data } = await get(
+        `/commercetools/getAllProducts?page=${currentPage + 1}&search=${search}`
+      );
+
+      // If there are no offset products, there are no more pages
+      if (data.pagination.offset + data.pagination.count >= data.pagination.total) {
+        setHasMorePages(false);
+      } else {
+        setHasMorePages(true);
+        setCurrentPage((prev) => prev + 1);
+      }
+
+      // If it's the first page, set the data or replace it
+      // otherwise append the new data
+      if (currentPage === 0) {
+        setProductData(data.results);
+      } else {
+        setProductData((prev) => [...prev, ...data.results]);
+      }
+
+      setIsLoading(false);
+    }
   }
 
+  // Close the modal if the value didn't change
   function onClose() {
-    // Close the modal if the value didn't change
     if (initialSelectedProductSlug === selectedProductSlug) {
       setIsModalOpen((prev) => !prev);
     } else {
@@ -77,16 +107,30 @@ export function ProductGridModal({
     }
   }
 
+  // Set initial product selection
   useEffect(() => {
     if (initialSelectedProductSlug) {
       setSelectedProductSlug(initialSelectedProductSlug);
     }
+  });
 
-    // fetchData();
-  }, []);
+  // Fetch data when the user scrolls to the bottom of the page
+  useEffect(() => {
+    if (debouncedInView) {
+      fetchData(debouncedSearchValue);
+    }
+  }, [debouncedInView]);
+
+  // This is a stupid hack to reset the page when the search value changes
+  // before it gets debounced. This way getCurrentPage is always 0 when the
+  // search value changes. Not my proudest work
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [searchValue]);
 
   useEffect(() => {
-    fetchData(1, debouncedSearchValue);
+    setCurrentPage(0);
+    fetchData(debouncedSearchValue);
   }, [debouncedSearchValue]);
 
   return (
@@ -110,11 +154,7 @@ export function ProductGridModal({
               Search for products
             </Searchbar>
           </SearchForm>
-          {isLoading ? (
-            <Flex alignItems="center" justifyContent="center" style={{ minHeight: '40vh' }}>
-              <Loader>Loading products...</Loader>
-            </Flex>
-          ) : productData.length === 0 ? (
+          {productData.length === 0 && !isLoading ? (
             <NoContent
               content={{
                 id: 'commercetools.no-products',
@@ -122,25 +162,33 @@ export function ProductGridModal({
               }}
             />
           ) : (
-            <Grid>
-              {productData.map((product) => {
-                const isSelected = selectedProductSlug === product.slug;
+            <>
+              <Grid>
+                {productData.map((product) => {
+                  const isSelected = selectedProductSlug === product.slug;
 
-                return (
-                  <ProductCard
-                    key={`product-${product.slug}`}
-                    slug={product.slug}
-                    title={product.title}
-                    price={product.price}
-                    image={product.image}
-                    selected={isSelected}
-                    onSelection={() => {
-                      setSelectedProductSlug(product.slug);
-                    }}
-                  />
-                );
-              })}
-            </Grid>
+                  return (
+                    <ProductCard
+                      key={`product-${product.slug}`}
+                      slug={product.slug}
+                      title={product.title}
+                      price={product.price}
+                      image={product.image}
+                      selected={isSelected}
+                      onSelection={() => {
+                        setSelectedProductSlug(product.slug);
+                      }}
+                    />
+                  );
+                })}
+              </Grid>
+              {hasMorePages && <div ref={ref} />}
+              {(isLoading || (debouncedInView && hasMorePages)) && (
+                <Flex alignItems="center" justifyContent="center" style={{ marginTop: '20px' }}>
+                  <Loader>Loading products...</Loader>
+                </Flex>
+              )}
+            </>
           )}
         </Box>
       </ModalBody>

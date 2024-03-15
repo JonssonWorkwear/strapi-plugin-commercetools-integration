@@ -12,7 +12,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       .plugin('commercetools')
       .service('productService')
       .searchProducts({
-        page: page,
+        offset: (page - 1) * 20,
         fuzzy: true,
         [`text.${CT_DEFAULT_LOCALE}`]: search,
       })) as ClientResponse<ProductProjectionPagedQueryResponse>;
