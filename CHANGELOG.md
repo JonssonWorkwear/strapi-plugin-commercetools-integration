@@ -1,3 +1,19 @@
+# [1.15.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.14.0...v1.15.0) (2024-03-15)
+
+
+### Bug Fixes
+
+* Revert image sort on products ([15d6492](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/15d6492c9abcb824aa830e002b42477bc8aa8ec5))
+* Update pagination data ([1871d74](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/1871d74e2697ce0da6338805f39d00b94b0bb289))
+
+
+### Features
+
+* Add react-intersection-observer dependency ([b578a98](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/b578a9897b92ef95b6172bdb51e66cc182d8649f))
+* Add search functionality to ProductGridModal component ([d3ccc74](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/d3ccc74d4c93af72ca2ed8830dea577cf82a61ca))
+* Add use-debounce dependency ([9901b3b](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/9901b3b16d2e1fb40d726bc75f6144293bf480d4))
+* Refactor product grid modal and pagination ([9e86071](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/9e86071373022e95f54aacd5777dca5c72eb8572))
+
 # [1.14.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.13.1...v1.14.0) (2024-03-14)
 
 
