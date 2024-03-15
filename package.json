@@ -14,6 +14,7 @@
     "@strapi/design-system": "1.13.0",
     "@strapi/helper-plugin": "4.15.0",
     "@strapi/icons": "1.13.0",
+    "react-intersection-observer": "^9.8.1",
     "use-debounce": "^10.0.0"
   },
   "devDependencies": {
