@@ -10,23 +10,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       .service('productService')
       .getAllProducts()) as ClientResponse<ProductProjectionPagedQueryResponse>;
 
-    // Re-arrange the data to be have the products with images first
-    products.body.results.sort((a, b) => {
-      if (!a.masterVariant.images || !b.masterVariant.images) {
-        return 0;
-      }
-
-      if (a.masterVariant.images.length > b.masterVariant.images.length) {
-        return -1;
-      }
-
-      if (a.masterVariant.images.length < b.masterVariant.images.length) {
-        return 1;
-      }
-
-      return 0;
-    });
-
     // Filter down only the necessary fields
     // Throw errors are picked up by the client as 500
     const productsData = products.body.results.map((product) => {
