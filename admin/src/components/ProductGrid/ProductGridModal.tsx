@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { useDebounce } from 'use-debounce';
+
 import styled from 'styled-components';
 
 import {
@@ -13,9 +15,11 @@ import {
   Typography,
   GridLayout,
   Loader,
+  SearchForm,
+  Searchbar,
 } from '@strapi/design-system';
 
-import { useFetchClient } from '@strapi/helper-plugin';
+import { useFetchClient, NoContent } from '@strapi/helper-plugin';
 
 import { ProductCard } from './ProductCard';
 
@@ -45,11 +49,18 @@ export function ProductGridModal({
 
   const [productData, setProductData] = useState<Array<ProductModelType>>([]);
   const [selectedProductSlug, setSelectedProductSlug] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  async function fetchData() {
-    const { data } = await get('/commercetools/getAllProducts');
+  // Debounce the search value
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [debouncedSearchValue] = useDebounce(searchValue, 300);
+
+  async function fetchData(page: number = 1, search: string = '') {
+    setIsLoading(true);
+    const { data } = await get(`/commercetools/getAllProducts?page=${page}&search=${search}`);
 
     setProductData(data);
+    setIsLoading(false);
   }
 
   function onClose() {
@@ -74,6 +85,10 @@ export function ProductGridModal({
     fetchData();
   }, []);
 
+  useEffect(() => {
+    fetchData(1, debouncedSearchValue);
+  }, [debouncedSearchValue]);
+
   return (
     <ModalLayout onClose={onClose} labelledBy="title">
       <ModalHeader>
@@ -81,9 +96,32 @@ export function ProductGridModal({
           Add new product
         </Typography>
       </ModalHeader>
-      <ModalBody>
+      <ModalBody style={{ minHeight: '60vh' }}>
         <Box>
-          {productData.length > 0 ? (
+          <SearchForm style={{ marginBottom: '20px' }}>
+            <Searchbar
+              name="query"
+              onClear={() => setSearchValue('')}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              clearLabel="Clear the search query"
+              placeholder="Search for products..."
+            >
+              Search for products
+            </Searchbar>
+          </SearchForm>
+          {isLoading ? (
+            <Flex alignItems="center" justifyContent="center" style={{ minHeight: '40vh' }}>
+              <Loader>Loading products...</Loader>
+            </Flex>
+          ) : productData.length === 0 ? (
+            <NoContent
+              content={{
+                id: 'commercetools.no-products',
+                defaultMessage: 'No products found',
+              }}
+            />
+          ) : (
             <Grid>
               {productData.map((product) => {
                 const isSelected = selectedProductSlug === product.slug;
@@ -103,10 +141,6 @@ export function ProductGridModal({
                 );
               })}
             </Grid>
-          ) : (
-            <Flex alignItems="center" justifyContent="center" style={{ minHeight: '60vh' }}>
-              <Loader>Loading content...</Loader>
-            </Flex>
           )}
         </Box>
       </ModalBody>

@@ -1,19 +1,32 @@
-import { ClientResponse, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 import { Strapi } from '@strapi/strapi';
+
+import { ClientResponse, ProductProjectionPagedQueryResponse } from '@commercetools/platform-sdk';
 
 const { CT_DEFAULT_LOCALE = 'en-ZA', CT_PLACEHOLDER_IMG_URL } = process.env;
 
 export default ({ strapi }: { strapi: Strapi }) => ({
   async getAllProducts(ctx) {
+    const { page = 1, search = '' } = ctx.request.query;
+
     const products = (await strapi
       .plugin('commercetools')
       .service('productService')
-      .getAllProducts()) as ClientResponse<ProductProjectionPagedQueryResponse>;
+      .searchProducts({
+        page: page,
+        fuzzy: true,
+        [`text.${CT_DEFAULT_LOCALE}`]: search,
+      })) as ClientResponse<ProductProjectionPagedQueryResponse>;
 
     // Filter down only the necessary fields
     // Throw errors are picked up by the client as 500
     const productsData = products.body.results.map((product) => {
       return {
+        pagination: {
+          total: products.body.total,
+          count: products.body.count,
+          page: products.body.offset,
+          limit: products.body.limit,
+        },
         title: product.name[CT_DEFAULT_LOCALE],
         description: product.description?.[CT_DEFAULT_LOCALE],
         slug: product.slug?.[CT_DEFAULT_LOCALE],
