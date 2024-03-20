@@ -31,4 +31,13 @@ export default [
       policies: [],
     },
   },
+
+  {
+    method: 'POST',
+    path: '/url/validate',
+    handler: 'urlController.validateSlug',
+    config: {
+      policies: [],
+    },
+  },
 ];
