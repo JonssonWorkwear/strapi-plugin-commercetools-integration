@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import { useFetchClient, useNotification } from '@strapi/helper-plugin';
+import { useFetchClient, useNotification, useCMEditViewDataManager } from '@strapi/helper-plugin';
 
 import { SingleSelect, SingleSelectOption } from '@strapi/design-system';
 
 import { useIntl, MessageDescriptor } from 'react-intl';
 
 type CategoryListProps = {
+  contentTypeUID: string;
   onChange: (event: { target: { name: string; value?: string | null; type?: string } }) => void;
   name: string;
   intlLabel: MessageDescriptor;
@@ -23,6 +24,7 @@ type CategoryModelType = {
 };
 
 export function CategoryList({
+  contentTypeUID,
   name,
   intlLabel,
   onChange,
@@ -32,8 +34,8 @@ export function CategoryList({
   hint,
   disabled,
 }: CategoryListProps) {
-  const { get } = useFetchClient();
-
+  const { get, post } = useFetchClient();
+  const { initialData } = useCMEditViewDataManager();
   const { formatMessage } = useIntl();
 
   const toggleNotification = useNotification();
@@ -78,6 +80,31 @@ export function CategoryList({
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    async function validateSlug(productSlug: string) {
+      try {
+        const { data } = await post(`/commercetools/url/validate`, {
+          contentTypeUID,
+          slug: productSlug,
+          initialSlug: initialData?.[name],
+          field: name,
+        });
+
+        if (data.isValid) {
+          setErrorMessage(undefined);
+        } else {
+          setErrorMessage('This category page already exists.');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    if (value) {
+      validateSlug(value);
+    }
+  }, [value]);
 
   return (
     <SingleSelect

@@ -45,8 +45,9 @@ export function ProductCarousel({
       required={required}
       error={error}
       disabled={disabled}
+      style={error ? { border: '1px solid #d02b20', borderRadius: 5 } : null}
       actions={
-        product && !isLoading ? (
+        product && !isLoading && !isError ? (
           <ProductCarouselActions openModal={openModal} onDelete={onDelete} disabled={disabled} />
         ) : undefined
       }

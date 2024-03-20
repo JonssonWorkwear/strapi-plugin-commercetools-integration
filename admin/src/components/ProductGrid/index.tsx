@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, MessageDescriptor } from 'react-intl';
 
-import { useFetchClient, useNotification } from '@strapi/helper-plugin';
+import { useFetchClient, useNotification, useCMEditViewDataManager } from '@strapi/helper-plugin';
 
 import { ProductGridModal } from './ProductGridModal';
 import { ProductCarousel } from './ProductCarousel';
 
 type ProductGridProps = {
+  contentTypeUID: string;
   intlLabel: MessageDescriptor;
   onChange: (event: { target: { name: string; value?: string | null; type?: string } }) => void;
   name: string;
@@ -26,6 +27,7 @@ type ProductModelType = {
 };
 
 export function ProductGrid({
+  contentTypeUID,
   intlLabel,
   name,
   onChange,
@@ -37,12 +39,13 @@ export function ProductGrid({
   disabled,
 }: ProductGridProps) {
   const toggleNotification = useNotification();
-  const { get } = useFetchClient();
-
+  const { get, post } = useFetchClient();
   const { formatMessage } = useIntl();
+  const { initialData } = useCMEditViewDataManager();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [productData, setProductData] = useState<ProductModelType | null>(null);
 
@@ -76,7 +79,27 @@ export function ProductGrid({
       }
     }
 
+    async function validateSlug(productSlug: string) {
+      try {
+        const { data } = await post(`/commercetools/url/validate`, {
+          contentTypeUID,
+          slug: productSlug,
+          initialSlug: initialData?.[name],
+          field: name,
+        });
+
+        if (data.isValid) {
+          setErrorMessage(undefined);
+        } else {
+          setErrorMessage('This product page already exists.');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     if (value) {
+      validateSlug(value);
       fetchData(value);
     } else {
       setProductData(null);
@@ -94,7 +117,7 @@ export function ProductGrid({
       <ProductCarousel
         name={formatMessage(intlLabel)}
         required={required}
-        error={error}
+        error={error || errorMessage}
         description={description}
         disabled={disabled}
         isError={isError}
