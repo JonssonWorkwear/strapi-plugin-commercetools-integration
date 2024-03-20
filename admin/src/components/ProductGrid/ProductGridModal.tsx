@@ -112,7 +112,7 @@ export function ProductGridModal({
     if (initialSelectedProductSlug) {
       setSelectedProductSlug(initialSelectedProductSlug);
     }
-  });
+  }, [initialSelectedProductSlug]);
 
   // Fetch data when the user scrolls to the bottom of the page
   useEffect(() => {
