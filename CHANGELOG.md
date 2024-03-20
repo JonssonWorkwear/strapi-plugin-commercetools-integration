@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.15.0...v1.15.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* Update initial selected product state ([882ecfd](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/882ecfd069c58e2590a2e7fe99c17a95ba757591))
+
 # [1.15.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.14.0...v1.15.0) (2024-03-15)
 
 
