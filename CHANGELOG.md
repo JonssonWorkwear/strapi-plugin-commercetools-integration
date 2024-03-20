@@ -1,3 +1,11 @@
+# [1.16.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.15.1...v1.16.0) (2024-03-20)
+
+
+### Features
+
+* Add slug validation to CategoryList and ProductGrid components ([1a4c52e](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/1a4c52ee6facd67e755bb73c7419656ef586e4e8))
+* Add URL slug validation endpoint ([53f9f9b](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/53f9f9bd6454f1d31b28ef63bc919232cc89e6e2))
+
 ## [1.15.1](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.15.0...v1.15.1) (2024-03-20)
 
 
