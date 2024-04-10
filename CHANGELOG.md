@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.16.0...v1.17.0) (2024-04-10)
+
+
+### Features
+
+* Refactor category filtering and ordering ([cda34e6](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/cda34e68b69ca8b48ea4bed3b596075f92726d74))
+
 # [1.16.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.15.1...v1.16.0) (2024-03-20)
 
 
