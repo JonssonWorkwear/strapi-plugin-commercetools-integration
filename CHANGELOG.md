@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.17.0...v1.18.0) (2024-04-16)
+
+
+### Features
+
+* Add about us page URL to URL service ([fea1c9c](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/commit/fea1c9c29e707ffb96b41b850fa9c0c0d0d8460f))
+
 # [1.17.0](https://github.com/JonssonWorkwear/strapi-plugin-commercetools-integration/compare/v1.16.0...v1.17.0) (2024-04-10)
 
 
