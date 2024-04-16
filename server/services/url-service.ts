@@ -148,6 +148,9 @@ export default () => ({
       case 'api::page-500.page-500':
         return `${domain}/500/`;
 
+      case 'api::about-us-page.about-us-page':
+        return `${domain}/about-us/`;
+
       case 'api::homepage.homepage':
         return `${domain}/`;
 
