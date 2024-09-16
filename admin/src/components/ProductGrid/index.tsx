@@ -3,10 +3,11 @@ import { useIntl, MessageDescriptor } from 'react-intl';
 
 import { useFetchClient, useNotification, useCMEditViewDataManager } from '@strapi/helper-plugin';
 
-import { ProductGridModal } from './ProductGridModal';
+import { ProductGridModal, ProductModelType } from './ProductGridModal';
 import { ProductCarousel } from './ProductCarousel';
 
 type ProductGridProps = {
+  attribute: {options:{variant?:boolean}}
   contentTypeUID: string;
   intlLabel: MessageDescriptor;
   onChange: (event: { target: { name: string; value?: string | null; type?: string } }) => void;
@@ -16,17 +17,12 @@ type ProductGridProps = {
   error?: string;
   labelAction?: React.ReactNode;
   required?: boolean;
+  variant?: boolean;
   value?: string;
 };
 
-type ProductModelType = {
-  slug: string;
-  title: string;
-  image: string;
-  price: number;
-};
-
 export function ProductGrid({
+  attribute,
   contentTypeUID,
   intlLabel,
   name,
@@ -38,6 +34,8 @@ export function ProductGrid({
   description,
   disabled,
 }: ProductGridProps) {
+  const variantSelection = attribute.options.variant;
+
   const toggleNotification = useNotification();
   const { get, post } = useFetchClient();
   const { formatMessage } = useIntl();
@@ -51,10 +49,12 @@ export function ProductGrid({
 
   // Set initial productData
   useEffect(() => {
-    async function fetchData(productSlug: string) {
+    async function fetchData(productSlugOrSku: string) {
       try {
+        const endpoint = variantSelection ? 'getProductBySku' : 'getProductBySlug';
+
         setIsLoading(true);
-        const { data } = await get(`/commercetools/getProductBySlug/${productSlug}`);
+        const { data } = await get(`/commercetools/${endpoint}/${productSlugOrSku}`);
 
         if (Object.keys(data).length === 0) {
           handleChange(null);
@@ -109,8 +109,8 @@ export function ProductGrid({
 
   // Update the selected product data and the value
   // of the entry – visible to the API!
-  function handleChange(productSlug: string | null) {
-    onChange({ target: { name, value: productSlug } });
+  function handleChange(product: ProductModelType | null) {
+    onChange({ target: { name, value: product?.slug } });
   }
   return (
     <>
@@ -130,7 +130,8 @@ export function ProductGrid({
       {isModalOpen ? (
         <ProductGridModal
           setIsModalOpen={setIsModalOpen}
-          initialSelectedProductSlug={value}
+          initialSelectedProduct={productData}
+          variantSelection={variantSelection}
           onFinish={(data) => {
             handleChange(data);
           }}

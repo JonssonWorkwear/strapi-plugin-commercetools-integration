@@ -45,6 +45,18 @@ export default {
                   defaultMessage: "You won't be able to create an entry if this field is empty",
                 },
               },
+              {
+                name: 'options.variant',
+                type: 'checkbox',
+                intlLabel: {
+                  id: 'commercetools.options.variant.label',
+                  defaultMessage: 'Variant selection',
+                },
+                description: {
+                  id: 'commercetools.options.variant.description',
+                  defaultMessage: 'Allows you to pick variants instead of master products',
+                }
+              }
             ],
           },
         ],

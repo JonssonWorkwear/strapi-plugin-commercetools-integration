@@ -17,6 +17,14 @@ export default [
   },
   {
     method: 'GET',
+    path: '/getProductBySku/:id',
+    handler: 'productController.getProductBySku',
+    config: {
+      policies: [],
+    },
+  },
+  {
+    method: 'GET',
     path: '/getAllCategories',
     handler: 'categoryController.getAllCategories',
     config: {

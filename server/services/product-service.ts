@@ -27,6 +27,17 @@ export default () => ({
       .execute();
   },
 
+  getProductBySku(sku: string) {
+    return client
+      .productProjections()
+      .get({
+        queryArgs: {
+          where: `variants(sku="${sku}")`
+        }
+      })
+      .execute();
+  },
+
   updateProductById(id: string, body: any) {
     return client
       .products()
