@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, MessageDescriptor } from 'react-intl';
 
-import { useFetchClient, useNotification } from '@strapi/helper-plugin';
+import { useFetchClient, useNotification, useCMEditViewDataManager } from '@strapi/helper-plugin';
 
-import { ProductGridModal } from './ProductGridModal';
+import { ProductGridModal, ProductModelType } from './ProductGridModal';
 import { ProductCarousel } from './ProductCarousel';
 
 type ProductGridProps = {
+  attribute: {options:{variant?:boolean}}
+  contentTypeUID: string;
   intlLabel: MessageDescriptor;
   onChange: (event: { target: { name: string; value?: string | null; type?: string } }) => void;
   name: string;
@@ -15,17 +17,13 @@ type ProductGridProps = {
   error?: string;
   labelAction?: React.ReactNode;
   required?: boolean;
+  variant?: boolean;
   value?: string;
 };
 
-type ProductModelType = {
-  slug: string;
-  title: string;
-  image: string;
-  price: number;
-};
-
 export function ProductGrid({
+  attribute,
+  contentTypeUID,
   intlLabel,
   name,
   onChange,
@@ -36,22 +34,27 @@ export function ProductGrid({
   description,
   disabled,
 }: ProductGridProps) {
-  const toggleNotification = useNotification();
-  const { get } = useFetchClient();
+  const variantSelection = attribute.options.variant;
 
+  const toggleNotification = useNotification();
+  const { get, post } = useFetchClient();
   const { formatMessage } = useIntl();
+  const { initialData } = useCMEditViewDataManager();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [productData, setProductData] = useState<ProductModelType | null>(null);
 
   // Set initial productData
   useEffect(() => {
-    async function fetchData(productSlug: string) {
+    async function fetchData(productSlugOrSku: string) {
       try {
+        const endpoint = variantSelection ? 'getProductBySku' : 'getProductBySlug';
+
         setIsLoading(true);
-        const { data } = await get(`/commercetools/getProductBySlug/${productSlug}`);
+        const { data } = await get(`/commercetools/${endpoint}/${productSlugOrSku}`);
 
         if (Object.keys(data).length === 0) {
           handleChange(null);
@@ -76,7 +79,27 @@ export function ProductGrid({
       }
     }
 
+    async function validateSlug(productSlug: string) {
+      try {
+        const { data } = await post(`/commercetools/url/validate`, {
+          contentTypeUID,
+          slug: productSlug,
+          initialSlug: initialData?.[name],
+          field: name,
+        });
+
+        if (data.isValid) {
+          setErrorMessage(undefined);
+        } else {
+          setErrorMessage('This product page already exists.');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     if (value) {
+      validateSlug(value);
       fetchData(value);
     } else {
       setProductData(null);
@@ -86,15 +109,15 @@ export function ProductGrid({
 
   // Update the selected product data and the value
   // of the entry – visible to the API!
-  function handleChange(productSlug: string | null) {
-    onChange({ target: { name, value: productSlug } });
+  function handleChange(product: ProductModelType | null) {
+    onChange({ target: { name, value: product?.slug } });
   }
   return (
     <>
       <ProductCarousel
         name={formatMessage(intlLabel)}
         required={required}
-        error={error}
+        error={error || errorMessage}
         description={description}
         disabled={disabled}
         isError={isError}
@@ -107,7 +130,8 @@ export function ProductGrid({
       {isModalOpen ? (
         <ProductGridModal
           setIsModalOpen={setIsModalOpen}
-          initialSelectedProductSlug={value}
+          initialSelectedProduct={productData}
+          variantSelection={variantSelection}
           onFinish={(data) => {
             handleChange(data);
           }}

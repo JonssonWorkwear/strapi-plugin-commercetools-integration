@@ -10,10 +10,16 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       .service('categoryService')
       .getAllCategories()) as ClientResponse<CategoryPagedQueryResponse>;
 
+    console.log('categories', categories.body.results);
+
     // Filter down only the necessary fields
     // Throw errors are picked up by the client as 500
     const categoriesData = await Promise.all(
       categories.body.results.map(async (category) => {
+        if (!category.name[CT_DEFAULT_LOCALE] || !category.slug?.[CT_DEFAULT_LOCALE]) {
+          return;
+        }
+
         if (category.ancestors.length > 0) {
           // Construct the name using the parent categories
           const parentNamesArray = [] as string[];
@@ -26,7 +32,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
             const ancestorName = ancestorData.body.name[CT_DEFAULT_LOCALE];
 
-            parentNamesArray.push(ancestorName);
+            if (ancestorName) {
+              parentNamesArray.push(ancestorName);
+            }
           }
 
           const name = parentNamesArray.join(' > ');
@@ -44,8 +52,14 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       })
     );
 
+    // Remove any empty objects
+    const cleanedCategoriesData = categoriesData.filter((category) => category) as Array<{
+      name: string;
+      slug: string;
+    }>;
+
     // Order the categories by name
-    categoriesData.sort((a, b) => {
+    const orderedCategoriesData = cleanedCategoriesData.sort((a, b) => {
       if (a.name < b.name) {
         return -1;
       }
@@ -57,6 +71,6 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       return 0;
     });
 
-    ctx.body = categoriesData;
+    ctx.body = orderedCategoriesData;
   },
 });

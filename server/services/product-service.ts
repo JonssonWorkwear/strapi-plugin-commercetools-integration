@@ -3,15 +3,17 @@ import { client } from './commercetools/client';
 const { CT_DEFAULT_LOCALE = 'en-ZA' } = process.env;
 
 export default () => ({
-  getAllProducts() {
+  getAllProducts(queryArgs: any = {}) {
     return client
       .productProjections()
       .get({
-        queryArgs: {
-          limit: 100,
-        },
+        queryArgs,
       })
       .execute();
+  },
+
+  searchProducts(queryArgs: any = {}) {
+    return client.productProjections().search().get({ queryArgs }).execute();
   },
 
   getProductBySlug(slug: string) {
@@ -21,6 +23,17 @@ export default () => ({
         queryArgs: {
           where: `slug(${CT_DEFAULT_LOCALE}="${slug}")`,
         },
+      })
+      .execute();
+  },
+
+  getProductBySku(sku: string) {
+    return client
+      .productProjections()
+      .get({
+        queryArgs: {
+          where: `variants(sku="${sku}")`
+        }
       })
       .execute();
   },

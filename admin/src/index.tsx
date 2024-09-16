@@ -45,6 +45,18 @@ export default {
                   defaultMessage: "You won't be able to create an entry if this field is empty",
                 },
               },
+              {
+                name: 'options.variant',
+                type: 'checkbox',
+                intlLabel: {
+                  id: 'commercetools.options.variant.label',
+                  defaultMessage: 'Variant selection',
+                },
+                description: {
+                  id: 'commercetools.options.variant.description',
+                  defaultMessage: 'Allows you to pick variants instead of master products',
+                }
+              }
             ],
           },
         ],
@@ -69,6 +81,51 @@ export default {
           import(
             /* webpackChunkName: "commercetools-plugin-category-list-component" */ './components/CategoryList'
           ).then((module) => ({ default: module.CategoryList })),
+      },
+      options: {
+        advanced: [
+          {
+            sectionTitle: {
+              id: 'commercetools.settings',
+              defaultMessage: 'Settings',
+            },
+            items: [
+              {
+                name: 'required',
+                type: 'checkbox',
+                intlLabel: {
+                  id: 'commercetools.required.label',
+                  defaultMessage: 'Required field',
+                },
+                description: {
+                  id: 'commercetools.required.description',
+                  defaultMessage: "You won't be able to create an entry if this field is empty",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    app.customFields.register({
+      name: 'UrlTextField',
+      pluginId: pluginId,
+      type: 'text',
+      icon: PluginIcon,
+      intlLabel: {
+        id: 'commercetools.url.label',
+        defaultMessage: 'URL Field',
+      },
+      intlDescription: {
+        id: 'commercetools.description',
+        defaultMessage: 'List of product categories, then pick one',
+      },
+      components: {
+        Input: async () =>
+          import(
+            /* webpackChunkName: "commercetools-plugin-category-list-component" */ './components/UrlTextField'
+          ).then((module) => ({ default: module.UrlTextField })),
       },
       options: {
         advanced: [
